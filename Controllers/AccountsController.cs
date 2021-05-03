@@ -8,6 +8,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace historial_blockchain.Contexts
 {
@@ -32,7 +34,7 @@ namespace historial_blockchain.Contexts
             var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email };
             var result = await _userManager.CreateAsync(user, userInfo.Password);
             if(result.Succeeded)
-                return BuildToken(userInfo);
+                return BuildToken(userInfo, new List<string>());
             return BadRequest("Username or password incorrect");
         }
 
@@ -41,18 +43,26 @@ namespace historial_blockchain.Contexts
         {
             var result = await _signInManager.PasswordSignInAsync(userInfo.Email, userInfo.Password, isPersistent: true, lockoutOnFailure: false);
             if(result.Succeeded)
-                return BuildToken(userInfo);
+            {
+                var user = await _userManager.FindByEmailAsync(userInfo.Email);
+                var roles = await _userManager.GetRolesAsync(user);
+                return BuildToken(userInfo, roles);
+            }
             ModelState.AddModelError(string.Empty, "Invalid login attempt");
             return BadRequest(ModelState);
         }
 
-        private UserToken BuildToken(UserInfo userInfo)
+        private UserToken BuildToken(UserInfo userInfo, IList<string> roles)
         {
-            var claims = new []{
+            var claims = new List<Claim>
+            {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
                 new Claim("Hospital", "nombreHospital"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            foreach (var role in roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

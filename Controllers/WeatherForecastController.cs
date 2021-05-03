@@ -10,8 +10,8 @@ using Microsoft.Extensions.Logging;
 namespace historial_blockchain.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
