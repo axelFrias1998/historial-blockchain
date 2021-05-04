@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using historial_blockchain.Contexts;
 using historial_blockchain.Models;
+using historial_blockchain.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,11 @@ namespace historial_blockchain
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddCors();
+            services.AddScoped<HashService>();
+            services.AddDataProtection();
+            services.AddDbContext<ManagementDbContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -69,6 +75,7 @@ namespace historial_blockchain
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            //app.UseCors(builder => builder.WithOrigins("https://localhost:5001"));
             app.UseRouting();
 
             app.UseAuthorization();
