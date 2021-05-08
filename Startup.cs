@@ -37,8 +37,6 @@ namespace historial_blockchain
             //services.AddCors();
             services.AddScoped<HashService>();
             services.AddDataProtection();
-            services.AddDbContext<ManagementDbContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, IdentityRole>()

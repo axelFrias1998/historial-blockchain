@@ -13,6 +13,12 @@ namespace historial_blockchain.Entities
 
         public DateTime RegisterDate { get; set; }
 
+        public int ServiceCatalogId { get; set; }
+        
+        public ServicesCatalog ServicesCatalog { get; set; }
+
+        public string AdminId { get; set; }
+  
         public ApplicationUser Admin { get; set; }
     }
 }

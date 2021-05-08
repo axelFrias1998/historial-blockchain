@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace historial_blockchain.Migrations
+namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
 {
-    public partial class sistemalogin : Migration
+    public partial class HospitalsRelatedWithUsers : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,20 @@ namespace historial_blockchain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServicesCatalog",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServicesCatalog", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -152,6 +166,58 @@ namespace historial_blockchain.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Hospitals",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ServiceCatalogId = table.Column<int>(type: "int", nullable: false),
+                    ServicesCatalogId = table.Column<int>(type: "int", nullable: true),
+                    AdminId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hospitals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Hospitals_AspNetUsers_AdminId",
+                        column: x => x.AdminId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Hospitals_ServicesCatalog_ServicesCatalogId",
+                        column: x => x.ServicesCatalogId,
+                        principalTable: "ServicesCatalog",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "708359a2-83cd-4952-a51b-b69a4726bc46", "b0c60e3a-ed8c-4e0a-8083-4577ce3bd27c", "SysAdmin", "SysAdmin" },
+                    { "c2d67887-8409-4a48-9c46-91e984491b0e", "c11ff678-fbd3-4708-97f1-0afe7ad5cf9e", "PacsAdmin", "PacsAdmin" },
+                    { "aee79132-4e2a-4a0d-aa94-d921248b2dcc", "7cade024-6ab8-402c-8559-dee911605130", "ClinicAdmin", "ClinicAdmin" },
+                    { "b0c4b3eb-5ec3-4ccd-ac97-7ce50efa0c80", "b0323bc4-2203-4a25-bd34-85e2ffdc50b2", "Pacient", "Pacient" },
+                    { "73bd4f6e-1fd9-4ccb-8782-b20f894832b3", "f9ea79d1-eaa0-4ffd-a424-b69940d7d23f", "Doctor", "Doctor" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ServicesCatalog",
+                columns: new[] { "Id", "IsPublic", "Type" },
+                values: new object[,]
+                {
+                    { 1, true, "Hospital" },
+                    { 2, false, "Hospital" },
+                    { 3, true, "Clínica" },
+                    { 4, false, "Clínica" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -190,6 +256,18 @@ namespace historial_blockchain.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Hospitals_AdminId",
+                table: "Hospitals",
+                column: "AdminId",
+                unique: true,
+                filter: "[AdminId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Hospitals_ServicesCatalogId",
+                table: "Hospitals",
+                column: "ServicesCatalogId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -210,10 +288,16 @@ namespace historial_blockchain.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Hospitals");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "ServicesCatalog");
         }
     }
 }
