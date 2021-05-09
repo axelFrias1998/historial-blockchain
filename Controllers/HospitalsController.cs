@@ -47,6 +47,7 @@ namespace historial_blockchain.Controllers
             return hospital;
         }
 
+        [Authorize(Roles = "SysAdmin")]
         [HttpPost]
         public ActionResult InsertHospital([FromBody] HospitalInfo hospitalInfo)
         {

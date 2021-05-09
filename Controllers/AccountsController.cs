@@ -64,20 +64,19 @@ namespace historial_blockchain.Contexts
 
         [Authorize(Roles = "SysAdmin")]
         [HttpPost("CreateAdmin/{type}")]
-        public async Task<ActionResult<UserToken>> CreateAdminAccount([FromBody] DoctorHospitalDTO doctorHospital, bool type)
+        public async Task<ActionResult<UserToken>> CreateAdminAccount([FromBody] UserInfo userInfo, bool type)
         {
             var user = new ApplicationUser { 
-                Apellido = doctorHospital.UserInfo.Apellido,
-                Email = doctorHospital.UserInfo.Email, 
-                Nombre = doctorHospital.UserInfo.Nombre,
-                PhoneNumber = doctorHospital.UserInfo.PhoneNumber,
-                UserName = doctorHospital.UserInfo.UserName, 
-                HospitalId = doctorHospital.HospitalId
+                Apellido = userInfo.Apellido,
+                Email = userInfo.Email, 
+                Nombre = userInfo.Nombre,
+                PhoneNumber = userInfo.PhoneNumber,
+                UserName = userInfo.UserName, 
             };
-            var result = await _userManager.CreateAsync(user, doctorHospital.UserInfo.Password);
+            var result = await _userManager.CreateAsync(user, userInfo.Password);
             if(result.Succeeded)
             {
-                var userData = await _userManager.FindByEmailAsync(doctorHospital.UserInfo.Email);
+                var userData = await _userManager.FindByEmailAsync(userInfo.Email);
                 string roleName = (type) ? "ClinicAdmin" : "PacsAdmin";
                 if(type)
                 {
@@ -90,8 +89,8 @@ namespace historial_blockchain.Contexts
                 var roles = await _userManager.GetRolesAsync(userData);
                 return BuildToken(
                     new UserLogin {
-                        Username = doctorHospital.UserInfo.UserName,
-                        Password = doctorHospital.UserInfo.Password
+                        Username = userInfo.UserName,
+                        Password = userInfo.Password
                     }, 
                     roles,
                     userData.Id);
