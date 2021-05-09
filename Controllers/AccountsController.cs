@@ -28,16 +28,20 @@ namespace historial_blockchain.Contexts
             _configuration = configuration;
         }
 
-        [HttpPost("Create")]
+        [HttpPost("Register")]
         public async Task<ActionResult<UserToken>> CreateAccount([FromBody] UserInfo userInfo)
         {
             var user = new ApplicationUser { 
-                UserName = userInfo.Email, 
-                Email = userInfo.Email };
+                Apellido = userInfo.Apellido,
+                Email = userInfo.Email, 
+                Nombre = userInfo.Nombre,
+                PhoneNumber = userInfo.PhoneNumber,
+                UserName = userInfo.UserName, 
+            };
             var result = await _userManager.CreateAsync(user, userInfo.Password);
             if(result.Succeeded)
                 return BuildToken(userInfo, new List<string>());
-            return BadRequest("Username or password incorrect");
+            return BadRequest("Datos incorrectos");
         }
 
         [HttpPost("Login")]
@@ -50,7 +54,7 @@ namespace historial_blockchain.Contexts
                 var roles = await _userManager.GetRolesAsync(user);
                 return BuildToken(userInfo, roles);
             }
-            ModelState.AddModelError(string.Empty, "Invalid login attempt");
+            ModelState.AddModelError(string.Empty, "Ingreso fallido");
             return BadRequest(ModelState);
         }
 
@@ -59,7 +63,7 @@ namespace historial_blockchain.Contexts
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
-                new Claim("Hospital", "nombreHospital"),
+                new Claim("Name", $"{userInfo.Nombre} {userInfo.Apellido}"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

@@ -7,6 +7,7 @@ namespace historial_blockchain.Entities
         [Key]
         public int Id { get; set; }
 
+        [StringLength(50)]
         public string Type { get; set; }
 
         //True for public hospitals and clinics
