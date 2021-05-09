@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using historial_blockchain.Contexts;
 
 namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210508082207_ServiceCatalogForeignKeys")]
+    partial class ServiceCatalogForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,36 +50,36 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                     b.HasData(
                         new
                         {
-                            Id = "2a1e24c8-0e77-40d2-93ec-01c9f2923816",
-                            ConcurrencyStamp = "3b1cc407-c9cd-4003-911c-92d7c87a5a47",
+                            Id = "619f1ae8-3e07-4a29-b6b1-ea516809d3ee",
+                            ConcurrencyStamp = "fe2db917-8ed9-4d1f-9e96-79c0f6d30746",
                             Name = "SysAdmin",
                             NormalizedName = "SysAdmin"
                         },
                         new
                         {
-                            Id = "9301ec3a-ffe0-41d1-b003-64708e976668",
-                            ConcurrencyStamp = "7d264661-3f74-426e-8d2a-f4fe31bbbd1c",
+                            Id = "f2a59a2e-140f-48ec-9d19-af8fe39dffe3",
+                            ConcurrencyStamp = "38f90b4c-a099-460e-b3b3-f0bba703e08c",
                             Name = "PacsAdmin",
                             NormalizedName = "PacsAdmin"
                         },
                         new
                         {
-                            Id = "7bd1e3a0-df9c-4a7f-a802-38e44a0805b2",
-                            ConcurrencyStamp = "c9b83ea6-c023-4e82-bcc9-ff8c40c09737",
+                            Id = "05f93caa-b9bf-47a9-a809-d4989abd9cf1",
+                            ConcurrencyStamp = "5faab9f0-50dc-4f1a-b8e5-2d43c47c6ba4",
                             Name = "ClinicAdmin",
                             NormalizedName = "ClinicAdmin"
                         },
                         new
                         {
-                            Id = "6325c230-54a1-451c-a9c0-aaa94a029813",
-                            ConcurrencyStamp = "8d1cbcfb-6657-458a-94fd-97ea0252ddaf",
+                            Id = "5e80ca4b-b0ed-4d4f-bce2-70488dbf1478",
+                            ConcurrencyStamp = "d4c7f1c7-fe7e-4559-aa05-f13ca7b0f298",
                             Name = "Pacient",
                             NormalizedName = "Pacient"
                         },
                         new
                         {
-                            Id = "1f4092bd-5b64-4c66-9cb0-03a5b05124c5",
-                            ConcurrencyStamp = "18c6b0a7-690b-42ea-b785-30ba0e3b37aa",
+                            Id = "7f0c4ad9-a864-49ea-84e0-ad2ebc3ec5c8",
+                            ConcurrencyStamp = "9a21ec0a-8a70-459a-b5f8-002d85fd6401",
                             Name = "Doctor",
                             NormalizedName = "Doctor"
                         });
@@ -209,9 +211,12 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdminId");
+                    b.HasIndex("AdminId")
+                        .IsUnique()
+                        .HasFilter("[AdminId] IS NOT NULL");
 
-                    b.HasIndex("ServiceCatalogId");
+                    b.HasIndex("ServiceCatalogId")
+                        .IsUnique();
 
                     b.ToTable("Hospitals");
                 });
@@ -280,7 +285,7 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                         .HasColumnType("bit");
 
                     b.Property<string>("HospitalId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -316,8 +321,6 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HospitalId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -384,12 +387,12 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
             modelBuilder.Entity("historial_blockchain.Entities.Hospital", b =>
                 {
                     b.HasOne("historial_blockchain.Models.ApplicationUser", "Admin")
-                        .WithMany()
-                        .HasForeignKey("AdminId");
+                        .WithOne("Hospital")
+                        .HasForeignKey("historial_blockchain.Entities.Hospital", "AdminId");
 
                     b.HasOne("historial_blockchain.Entities.ServicesCatalog", "ServicesCatalog")
-                        .WithMany()
-                        .HasForeignKey("ServiceCatalogId")
+                        .WithOne("Hospital")
+                        .HasForeignKey("historial_blockchain.Entities.Hospital", "ServiceCatalogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -398,12 +401,13 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                     b.Navigation("ServicesCatalog");
                 });
 
+            modelBuilder.Entity("historial_blockchain.Entities.ServicesCatalog", b =>
+                {
+                    b.Navigation("Hospital");
+                });
+
             modelBuilder.Entity("historial_blockchain.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("historial_blockchain.Entities.Hospital", "Hospital")
-                        .WithMany()
-                        .HasForeignKey("HospitalId");
-
                     b.Navigation("Hospital");
                 });
 #pragma warning restore 612, 618

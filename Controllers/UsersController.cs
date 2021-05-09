@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using historial_blockchain.Entities;
 using historial_blockchain.Models;
 using historial_blockchain.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +21,12 @@ namespace historial_blockchain.Contexts
         {
             this.context = context;
             this.userManager = userManager;
+        }
+
+        [HttpGet("GetRoles")]
+        public ActionResult<IEnumerable<IdentityRole>>  GetRoles()
+        {
+            return context.Roles.ToList();
         }
 
         [HttpPost("AsignRole")]

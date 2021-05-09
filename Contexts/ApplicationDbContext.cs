@@ -20,6 +20,7 @@ namespace historial_blockchain.Contexts
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            #region ServiceCatalog
             var publicHospital = new ServicesCatalog(){
                 Id = 1,
                 Type = "Hospital",
@@ -47,7 +48,9 @@ namespace historial_blockchain.Contexts
                 IsPublic = false
             };
             builder.Entity<ServicesCatalog>().HasData(privateClinic);
+            #endregion
             
+            #region IdentityRole
             var sysAdmin = new IdentityRole(){
                 Id = Guid.NewGuid().ToString(),
                 Name = "SysAdmin",
@@ -82,7 +85,8 @@ namespace historial_blockchain.Contexts
                 NormalizedName = "Doctor"
             };
             builder.Entity<IdentityRole>().HasData(doctor);
-
+            #endregion
+            
             base.OnModelCreating(builder);
         }
     }

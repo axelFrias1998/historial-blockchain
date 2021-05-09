@@ -31,7 +31,9 @@ namespace historial_blockchain.Contexts
         [HttpPost("Create")]
         public async Task<ActionResult<UserToken>> CreateAccount([FromBody] UserInfo userInfo)
         {
-            var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email };
+            var user = new ApplicationUser { 
+                UserName = userInfo.Email, 
+                Email = userInfo.Email };
             var result = await _userManager.CreateAsync(user, userInfo.Password);
             if(result.Succeeded)
                 return BuildToken(userInfo, new List<string>());

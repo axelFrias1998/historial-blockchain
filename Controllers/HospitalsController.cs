@@ -20,16 +20,22 @@ namespace historial_blockchain.Controllers
             this.context = context;
         }
 
+        [HttpGet("GetCatalogOfServices")]
+        public ActionResult<IEnumerable<ServicesCatalog>> GetCatalogOfServices()
+        {
+            return context.ServicesCatalog.ToList();
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<Hospital>> GetHospitalsInfo()
         {
-            return context.Hospitals.ToList();
+            return context.Hospitals.Include(x => x.Admin).ToList();
         }
 
         [HttpGet("{id}", Name = "GetHospitalInfo")]
         public ActionResult<Hospital> GetHospitalInfo(string id)
         {
-            var hospital = context.Hospitals.FirstOrDefault(x => x.Id.Equals(id));
+            var hospital = context.Hospitals.Include(x => x.Admin).FirstOrDefault(x => x.Id.Equals(id));
             if(hospital is null)
                 return NotFound();
             return hospital;

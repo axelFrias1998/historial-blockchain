@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
 {
-    public partial class HospitalsRelatedWithUsers : Migration
+    public partial class ServiceCatalogForeignKeys : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,6 +26,7 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    HospitalId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -175,7 +176,6 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ServiceCatalogId = table.Column<int>(type: "int", nullable: false),
-                    ServicesCatalogId = table.Column<int>(type: "int", nullable: true),
                     AdminId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -188,11 +188,11 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Hospitals_ServicesCatalog_ServicesCatalogId",
-                        column: x => x.ServicesCatalogId,
+                        name: "FK_Hospitals_ServicesCatalog_ServiceCatalogId",
+                        column: x => x.ServiceCatalogId,
                         principalTable: "ServicesCatalog",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -200,11 +200,11 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "708359a2-83cd-4952-a51b-b69a4726bc46", "b0c60e3a-ed8c-4e0a-8083-4577ce3bd27c", "SysAdmin", "SysAdmin" },
-                    { "c2d67887-8409-4a48-9c46-91e984491b0e", "c11ff678-fbd3-4708-97f1-0afe7ad5cf9e", "PacsAdmin", "PacsAdmin" },
-                    { "aee79132-4e2a-4a0d-aa94-d921248b2dcc", "7cade024-6ab8-402c-8559-dee911605130", "ClinicAdmin", "ClinicAdmin" },
-                    { "b0c4b3eb-5ec3-4ccd-ac97-7ce50efa0c80", "b0323bc4-2203-4a25-bd34-85e2ffdc50b2", "Pacient", "Pacient" },
-                    { "73bd4f6e-1fd9-4ccb-8782-b20f894832b3", "f9ea79d1-eaa0-4ffd-a424-b69940d7d23f", "Doctor", "Doctor" }
+                    { "619f1ae8-3e07-4a29-b6b1-ea516809d3ee", "fe2db917-8ed9-4d1f-9e96-79c0f6d30746", "SysAdmin", "SysAdmin" },
+                    { "f2a59a2e-140f-48ec-9d19-af8fe39dffe3", "38f90b4c-a099-460e-b3b3-f0bba703e08c", "PacsAdmin", "PacsAdmin" },
+                    { "05f93caa-b9bf-47a9-a809-d4989abd9cf1", "5faab9f0-50dc-4f1a-b8e5-2d43c47c6ba4", "ClinicAdmin", "ClinicAdmin" },
+                    { "5e80ca4b-b0ed-4d4f-bce2-70488dbf1478", "d4c7f1c7-fe7e-4559-aa05-f13ca7b0f298", "Pacient", "Pacient" },
+                    { "7f0c4ad9-a864-49ea-84e0-ad2ebc3ec5c8", "9a21ec0a-8a70-459a-b5f8-002d85fd6401", "Doctor", "Doctor" }
                 });
 
             migrationBuilder.InsertData(
@@ -265,9 +265,10 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                 filter: "[AdminId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Hospitals_ServicesCatalogId",
+                name: "IX_Hospitals_ServiceCatalogId",
                 table: "Hospitals",
-                column: "ServicesCatalogId");
+                column: "ServiceCatalogId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
