@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using historial_blockchain.Contexts;
 using historial_blockchain.Entities;
 using historial_blockchain.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +14,7 @@ namespace historial_blockchain.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin")]
     public class HospitalsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -20,6 +24,7 @@ namespace historial_blockchain.Controllers
             this.context = context;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetCatalogOfServices")]
         public ActionResult<IEnumerable<ServicesCatalog>> GetCatalogOfServices()
         {
@@ -32,6 +37,7 @@ namespace historial_blockchain.Controllers
             return context.Hospitals.Include(x => x.Admin).ToList();
         }
 
+        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet("{id}", Name = "GetHospitalInfo")]
         public ActionResult<Hospital> GetHospitalInfo(string id)
         {
@@ -58,6 +64,7 @@ namespace historial_blockchain.Controllers
             return new CreatedAtActionResult("GetHospitalInfo", "Hospitals", new { id = hospital.Id }, hospital);
         }
 
+        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpPut("{id}")]
         public ActionResult Put(string id, [FromBody] Hospital hospital)
         {

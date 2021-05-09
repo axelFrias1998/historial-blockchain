@@ -10,11 +10,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using historial_blockchain.Models.DTOs;
 
 namespace historial_blockchain.Contexts
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,6 +32,7 @@ namespace historial_blockchain.Contexts
             _configuration = configuration;
         }
 
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<ActionResult<UserToken>> CreateAccount([FromBody] UserInfo userInfo)
         {
@@ -40,30 +45,124 @@ namespace historial_blockchain.Contexts
             };
             var result = await _userManager.CreateAsync(user, userInfo.Password);
             if(result.Succeeded)
-                return BuildToken(userInfo, new List<string>());
+            {
+                var userData = await _userManager.FindByEmailAsync(userInfo.Email);
+                await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "SysAdmin"));
+                await _userManager.AddToRoleAsync(userData, "SysAdmin");
+                
+                var roles = await _userManager.GetRolesAsync(userData);
+                return BuildToken(
+                    new UserLogin {
+                        Username = userInfo.UserName,
+                        Password = userInfo.Password
+                    }, 
+                    roles,
+                    userData.Id);
+            }
+            return BadRequest("Datos incorrectos");
+        }
+
+        [Authorize(Roles = "SysAdmin")]
+        [HttpPost("CreateAdmin/{type}")]
+        public async Task<ActionResult<UserToken>> CreateAdminAccount([FromBody] DoctorHospitalDTO doctorHospital, bool type)
+        {
+            var user = new ApplicationUser { 
+                Apellido = doctorHospital.UserInfo.Apellido,
+                Email = doctorHospital.UserInfo.Email, 
+                Nombre = doctorHospital.UserInfo.Nombre,
+                PhoneNumber = doctorHospital.UserInfo.PhoneNumber,
+                UserName = doctorHospital.UserInfo.UserName, 
+                HospitalId = doctorHospital.HospitalId
+            };
+            var result = await _userManager.CreateAsync(user, doctorHospital.UserInfo.Password);
+            if(result.Succeeded)
+            {
+                var userData = await _userManager.FindByEmailAsync(doctorHospital.UserInfo.Email);
+                string roleName = (type) ? "ClinicAdmin" : "PacsAdmin";
+                if(type)
+                {
+                    await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Doctor"));
+                    await _userManager.AddToRoleAsync(userData, "Doctor");
+                }
+                await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, roleName));
+                await _userManager.AddToRoleAsync(userData, roleName);
+
+                var roles = await _userManager.GetRolesAsync(userData);
+                return BuildToken(
+                    new UserLogin {
+                        Username = doctorHospital.UserInfo.UserName,
+                        Password = doctorHospital.UserInfo.Password
+                    }, 
+                    roles,
+                    userData.Id);
+            }
+            return BadRequest("Datos incorrectos");
+        }
+
+        [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
+        [HttpPost("CreateDoctor")]
+        public async Task<ActionResult<UserToken>> CreateDoctorAccount([FromBody] DoctorHospitalDTO doctorHospital)
+        {
+            var user = new ApplicationUser { 
+                Apellido = doctorHospital.UserInfo.Apellido,
+                Email = doctorHospital.UserInfo.Email, 
+                Nombre = doctorHospital.UserInfo.Nombre,
+                PhoneNumber = doctorHospital.UserInfo.PhoneNumber,
+                UserName = doctorHospital.UserInfo.UserName, 
+                HospitalId = doctorHospital.HospitalId
+            };
+            var result = await _userManager.CreateAsync(user, doctorHospital.UserInfo.Password);
+            if(result.Succeeded)
+            {
+                var userData = await _userManager.FindByEmailAsync(doctorHospital.UserInfo.Email);
+                await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Doctor"));
+                await _userManager.AddToRoleAsync(userData, "Doctor");
+                var roles = await _userManager.GetRolesAsync(userData);
+                return BuildToken(
+                    new UserLogin {
+                        Username = doctorHospital.UserInfo.UserName,
+                        Password = doctorHospital.UserInfo.Password
+                    }, 
+                    roles,
+                    userData.Id);
+            }
             return BadRequest("Datos incorrectos");
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<UserToken>> Login([FromBody] UserInfo userInfo)
+        public async Task<ActionResult<UserToken>> Login([FromBody] UserLogin userLogin)
         {
-            var result = await _signInManager.PasswordSignInAsync(userInfo.Email, userInfo.Password, isPersistent: true, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(userLogin.Username, userLogin.Password, isPersistent: true, lockoutOnFailure: false);
             if(result.Succeeded)
             {
-                var user = await _userManager.FindByEmailAsync(userInfo.Email);
+                var user = await _userManager.FindByNameAsync(userLogin.Username);
                 var roles = await _userManager.GetRolesAsync(user);
-                return BuildToken(userInfo, roles);
+                return BuildToken(userLogin, roles, user.Id);
             }
             ModelState.AddModelError(string.Empty, "Ingreso fallido");
             return BadRequest(ModelState);
         }
 
-        private UserToken BuildToken(UserInfo userInfo, IList<string> roles)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin")]
+        [HttpDelete("DeleteDoctor")]
+        public async Task<ActionResult<UserToken>> DeleteDoctor([FromBody] UserLogin userLogin)
+        {
+            var result = await _signInManager.PasswordSignInAsync(userLogin.Username, userLogin.Password, isPersistent: true, lockoutOnFailure: false);
+            if(result.Succeeded)
+            {
+                var user = await _userManager.FindByNameAsync(userLogin.Username);
+                var roles = await _userManager.GetRolesAsync(user);
+                return BuildToken(userLogin, roles, user.Id);
+            }
+            ModelState.AddModelError(string.Empty, "Ingreso fallido");
+            return BadRequest(ModelState);
+        }
+
+        private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId)
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
-                new Claim("Name", $"{userInfo.Nombre} {userInfo.Apellido}"),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -84,8 +183,9 @@ namespace historial_blockchain.Contexts
             );
 
             return new UserToken(){
+                Expiration = expiration,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = expiration
+                UserId = userId
             };
         }
     }

@@ -7,6 +7,7 @@ using historial_blockchain.Models;
 using historial_blockchain.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace historial_blockchain.Contexts
 {
@@ -27,6 +28,18 @@ namespace historial_blockchain.Contexts
         public ActionResult<IEnumerable<IdentityRole>>  GetRoles()
         {
             return context.Roles.ToList();
+        }
+
+        [HttpPut("AsignHospital")]
+        public async Task<ActionResult> AsignHospital(HospitalAdminDTO hospitalIdentification)
+        {
+            var user = await userManager.FindByIdAsync(hospitalIdentification.UserId);
+            if(user is null) 
+                return BadRequest();
+            user.HospitalId = hospitalIdentification.HospitalId;
+            context.Entry(user).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+            return Ok();
         }
 
         [HttpPost("AsignRole")]
