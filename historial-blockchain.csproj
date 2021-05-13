@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>historial_blockchain</RootNamespace>
+    <UserSecretsId>e558fb3a-5a9d-416e-9fb0-c92b104a66ea</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
