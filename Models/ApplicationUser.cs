@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using historial_blockchain.Entities;
@@ -21,5 +22,7 @@ namespace historial_blockchain.Models
         public string Apellido { get; set; }
 
         public virtual Hospital Hospital { get; set; }
+
+        public ICollection<Consulta> Consultas { get; set; }
     }
 }

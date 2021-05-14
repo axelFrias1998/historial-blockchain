@@ -32,6 +32,7 @@ namespace historial_blockchain.Contexts
             _configuration = configuration;
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}", Name = "GetAccountInfo")]
         public async Task<ActionResult<ApplicationUser>> GetAccountInfo(string id)
         {
@@ -42,7 +43,7 @@ namespace historial_blockchain.Contexts
         }
 
         [AllowAnonymous]
-        [HttpPost(Name = "Register")]
+        [HttpPost("CreateAccount")]
         public async Task<ActionResult<UserToken>> CreateAccount([FromBody] UserInfo userInfo)
         {
             var user = new ApplicationUser { 
@@ -122,7 +123,7 @@ namespace historial_blockchain.Contexts
             return BadRequest("Datos incorrectos");
         }
 
-        [HttpPost(Name = "Login")]
+        [HttpPost("Login")]
         public async Task<ActionResult<UserToken>> Login([FromBody] UserLogin userLogin)
         {
             var result = await _signInManager.PasswordSignInAsync(userLogin.Username, userLogin.Password, isPersistent: true, lockoutOnFailure: false);
@@ -137,7 +138,7 @@ namespace historial_blockchain.Contexts
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin")]
-        [HttpDelete(Name = "DeleteDoctor")]
+        [HttpDelete("DeleteDoctor")]
         public async Task<ActionResult<UserToken>> DeleteDoctor([FromBody] UserLogin userLogin)
         {
             var result = await _signInManager.PasswordSignInAsync(userLogin.Username, userLogin.Password, isPersistent: true, lockoutOnFailure: false);
@@ -180,8 +181,6 @@ namespace historial_blockchain.Contexts
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 UserId = userId
             };
-        }
-
-        
+        }    
     }
 }

@@ -16,16 +16,7 @@ namespace historial_blockchain
     {
         public static void Main(string[] args)
         {
-            //CreateHostBuilder(args).Build().Run();
-            var webHost = CreateHostBuilder(args).Build();
- 
-            using (var scope = webHost.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                context.Database.Migrate();
-            }
-        
-            webHost.Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
