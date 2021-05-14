@@ -32,8 +32,17 @@ namespace historial_blockchain.Contexts
             _configuration = configuration;
         }
 
+        [HttpGet("{id}", Name = "GetAccountInfo")]
+        public async Task<ActionResult<ApplicationUser>> GetAccountInfo(string id)
+        {
+            var account = await _userManager.FindByIdAsync(id); 
+            if(account is null)
+                return NotFound();
+            return account;
+        }
+
         [AllowAnonymous]
-        [HttpPost("Register")]
+        [HttpPost(Name = "Register")]
         public async Task<ActionResult<UserToken>> CreateAccount([FromBody] UserInfo userInfo)
         {
             var user = new ApplicationUser { 
@@ -63,8 +72,8 @@ namespace historial_blockchain.Contexts
         }
 
         [Authorize(Roles = "SysAdmin")]
-        [HttpPost("CreateAdmin/{type}")]
-        public async Task<ActionResult<UserToken>> CreateAdminAccount([FromBody] UserInfo userInfo, bool type)
+        [HttpPost("{type}", Name = "CreateAdmin")]
+        public async Task<ActionResult> CreateAdminAccount([FromBody] UserInfo userInfo, bool type)
         {
             var user = new ApplicationUser { 
                 Apellido = userInfo.Apellido,
@@ -85,22 +94,14 @@ namespace historial_blockchain.Contexts
                 }
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, roleName));
                 await _userManager.AddToRoleAsync(userData, roleName);
-
-                var roles = await _userManager.GetRolesAsync(userData);
-                return BuildToken(
-                    new UserLogin {
-                        Username = userInfo.UserName,
-                        Password = userInfo.Password
-                    }, 
-                    roles,
-                    userData.Id);
+                return new CreatedAtActionResult("GetAccountInfo", "Accounts", new { id = userData.Id }, userData);
             }
             return BadRequest("Datos incorrectos");
         }
 
         [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
-        [HttpPost("CreateDoctor")]
-        public async Task<ActionResult<UserToken>> CreateDoctorAccount([FromBody] DoctorHospitalDTO doctorHospital)
+        [HttpPost(Name = "CreateDoctor")]
+        public async Task<ActionResult> CreateDoctorAccount([FromBody] DoctorHospitalDTO doctorHospital)
         {
             var user = new ApplicationUser { 
                 Apellido = doctorHospital.UserInfo.Apellido,
@@ -116,19 +117,12 @@ namespace historial_blockchain.Contexts
                 var userData = await _userManager.FindByEmailAsync(doctorHospital.UserInfo.Email);
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Doctor"));
                 await _userManager.AddToRoleAsync(userData, "Doctor");
-                var roles = await _userManager.GetRolesAsync(userData);
-                return BuildToken(
-                    new UserLogin {
-                        Username = doctorHospital.UserInfo.UserName,
-                        Password = doctorHospital.UserInfo.Password
-                    }, 
-                    roles,
-                    userData.Id);
+                return new CreatedAtActionResult("GetAccountInfo", "Accounts", new { id = userData.Id }, userData);
             }
             return BadRequest("Datos incorrectos");
         }
 
-        [HttpPost("Login")]
+        [HttpPost(Name = "Login")]
         public async Task<ActionResult<UserToken>> Login([FromBody] UserLogin userLogin)
         {
             var result = await _signInManager.PasswordSignInAsync(userLogin.Username, userLogin.Password, isPersistent: true, lockoutOnFailure: false);
@@ -143,7 +137,7 @@ namespace historial_blockchain.Contexts
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin")]
-        [HttpDelete("DeleteDoctor")]
+        [HttpDelete(Name = "DeleteDoctor")]
         public async Task<ActionResult<UserToken>> DeleteDoctor([FromBody] UserLogin userLogin)
         {
             var result = await _signInManager.PasswordSignInAsync(userLogin.Username, userLogin.Password, isPersistent: true, lockoutOnFailure: false);
@@ -187,5 +181,7 @@ namespace historial_blockchain.Contexts
                 UserId = userId
             };
         }
+
+        
     }
 }
