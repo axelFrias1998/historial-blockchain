@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using historial_blockchain.Models;
@@ -8,31 +9,39 @@ namespace historial_blockchain.Entities
 {
     public class Hospital
     {
-        [Key]
-        public string Id { get; set; }
+        public Hospital()
+        {
+            this.Doctors = new List<ApplicationUser>();
+            this.Especialidades = new List<SpecialitiesCatalog>();
+            this.Consultas = new List<Consulta>();
+        }
 
-        [Required]
-        [StringLength(150)]
+        [Key]
+        public string HospitalId { get; set; }
+
+        [Required, StringLength(150)]
         public string Name { get; set; }
 
-        [Phone]
-        [Required]
-        [StringLength(20)]
+        [Phone, Required, StringLength(20)]
         public string PhoneNumber { get; set; }
 
         [Required]
         public DateTime RegisterDate { get; set; }
 
-        [ForeignKey("ServicesCatalog")]
-        [Required]
+        [Required, ForeignKey("ServicesCatalog")]
         public int ServiceCatalogId { get; set; }
-        
+
         public virtual ServicesCatalog ServicesCatalog { get; set; }
 
-        [ForeignKey("Admin")]
-        [Required]
+        [Required, ForeignKey("Admin")]
         public string AdminId { get; set; }
 
         public virtual ApplicationUser Admin { get; set; }
+
+        public virtual ICollection<ApplicationUser> Doctors { get; set; }
+
+        public virtual ICollection<SpecialitiesCatalog> Especialidades { get; set ; }
+
+        public virtual ICollection<Consulta> Consultas { get; set ; }
     }
 }

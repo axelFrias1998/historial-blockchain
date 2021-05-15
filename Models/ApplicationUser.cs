@@ -8,21 +8,21 @@ namespace historial_blockchain.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [ForeignKey("Hospital")]
-        public string HospitalId { get; set; }
-
+        public ApplicationUser()
+        {
+            this.Hospitals = new List<Hospital>();
+        }
+        
         [DataType(DataType.Text)]        
-        [Required(ErrorMessage = "Nombre es requerido")]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Nombre es requerido"), StringLength(100)]
         public string Nombre { get; set; }
 
         [DataType(DataType.Text)]        
-        [Required(ErrorMessage = "Apellido es requerido")]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Apellido es requerido"), StringLength(100)]
         public string Apellido { get; set; }
 
-        public virtual Hospital Hospital { get; set; }
+        public virtual Hospital HospitalAdmin { get; set; }
 
-        public ICollection<Consulta> Consultas { get; set; }
+        public virtual ICollection<Hospital> Hospitals { get; set; }
     }
 }

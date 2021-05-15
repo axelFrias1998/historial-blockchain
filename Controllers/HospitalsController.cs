@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using historial_blockchain.Contexts;
 using historial_blockchain.Entities;
 using historial_blockchain.Models;
+using historial_blockchain.Models.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,9 +22,12 @@ namespace historial_blockchain.Controllers
     {
         private readonly ApplicationDbContext context;
 
-        public HospitalsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> userManager;
+
+        public HospitalsController(ApplicationDbContext context,  UserManager<ApplicationUser> userManager)
         {
             this.context = context;
+            this.userManager = userManager;
         }
 
         [AllowAnonymous]
@@ -41,7 +47,7 @@ namespace historial_blockchain.Controllers
         [HttpGet("{id}", Name = "GetHospitalInfo")]
         public ActionResult<Hospital> GetHospitalInfo(string id)
         {
-            var hospital = context.Hospitals.Include(x => x.Admin).FirstOrDefault(x => x.Id.Equals(id));
+            var hospital = context.Hospitals.Include(x => x.Admin).FirstOrDefault(x => x.HospitalId.Equals(id));
             if(hospital is null)
                 return NotFound();
             return hospital;
@@ -52,7 +58,7 @@ namespace historial_blockchain.Controllers
         public ActionResult InsertHospital([FromBody] HospitalInfo hospitalInfo)
         {
             Hospital hospital = new Hospital{
-                Id = Guid.NewGuid().ToString(),
+                HospitalId = Guid.NewGuid().ToString(),
                 Name = hospitalInfo.Name,
                 PhoneNumber = hospitalInfo.PhoneNumber,
                 RegisterDate = DateTime.Now,
@@ -62,25 +68,36 @@ namespace historial_blockchain.Controllers
 
             context.Hospitals.Add(hospital);
             context.SaveChanges();
-            return new CreatedAtActionResult("GetHospitalInfo", "Hospitals", new { id = hospital.Id }, hospital);
+            return new CreatedAtActionResult("GetHospitalInfo", "Hospitals", new { id = hospital.HospitalId }, hospital);
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpPut("{id}")]
         public ActionResult Put(string id, [FromBody] Hospital hospital)
         {
-            if(id != hospital.Id)
+            if(id != hospital.HospitalId)
                 return BadRequest();
-            
             context.Entry(hospital).State = EntityState.Modified;
             context.SaveChanges();
             return Ok();
         }
 
+        [HttpPut("AssignAdministrator")]
+        public async Task<ActionResult> AssignAdministrator(HospitalAdminDTO hospitalIdentification)
+        {
+            var hospital = await context.Hospitals.FindAsync(hospitalIdentification.HospitalId);
+            if(hospital is null) 
+                return BadRequest();
+            hospital.AdminId = hospitalIdentification.UserId;
+            context.Entry(hospital).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+        
         [HttpDelete("{id}")]
         public ActionResult<Hospital> Delete(string id)
         {
-            Hospital hospital = context.Hospitals.FirstOrDefault(x => x.Id.Equals(id));
+            Hospital hospital = context.Hospitals.FirstOrDefault(x => x.HospitalId.Equals(id));
             
             if(hospital is null)
                 return NotFound();
@@ -89,5 +106,6 @@ namespace historial_blockchain.Controllers
             context.SaveChanges();
             return hospital;
         }
+
     }
 }

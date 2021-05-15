@@ -1,6 +1,6 @@
 namespace historial_blockchain.Models.DTOs
 {
-    public class DoctorHospitalDTO
+    public class HospitalDoctorDTO
     {
         public UserInfo UserInfo { get; set; }
 

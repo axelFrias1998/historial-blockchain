@@ -30,18 +30,6 @@ namespace historial_blockchain.Contexts
             return context.Roles.ToList();
         }
 
-        [HttpPut("AsignHospital")]
-        public async Task<ActionResult> AsignHospital(HospitalAdminDTO hospitalIdentification)
-        {
-            var user = await userManager.FindByIdAsync(hospitalIdentification.UserId);
-            if(user is null) 
-                return BadRequest();
-            user.HospitalId = hospitalIdentification.HospitalId;
-            context.Entry(user).State = EntityState.Modified;
-            await context.SaveChangesAsync();
-            return Ok();
-        }
-
         [HttpPost("AsignRole")]
         public async Task<ActionResult> AsignRole(EditRoleDTO editRoleDTO)
         {

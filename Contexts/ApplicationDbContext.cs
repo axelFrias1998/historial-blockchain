@@ -13,13 +13,49 @@ namespace historial_blockchain.Contexts
         {
             
         }
-
         public DbSet<Hospital> Hospitals { get; set; }
-
+        public DbSet<Consulta> Consultas { get; set; }
         public DbSet<ServicesCatalog> ServicesCatalog { get; set; }
+        public DbSet<SpecialitiesCatalog> SpecialitiesCatalog { get; set; }
+
+
+        //public DbSet<Consulta> Consulta { get; set; }
+
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            #region SpecialitiesCatalog
+            var pediatria = new SpecialitiesCatalog(){
+                Id = 1,
+                Type = "Pediatría"
+            };
+            builder.Entity<SpecialitiesCatalog>().HasData(pediatria);
+
+            var ginecologia = new SpecialitiesCatalog(){
+                Id = 2,
+                Type = "Ginecología"
+            };
+            builder.Entity<SpecialitiesCatalog>().HasData(ginecologia);
+
+            var geriatria = new SpecialitiesCatalog(){
+                Id = 3,
+                Type = "Geriatría"
+            };
+            builder.Entity<SpecialitiesCatalog>().HasData(geriatria);
+
+            var odontologia = new SpecialitiesCatalog(){
+                Id = 4,
+                Type = "Odontología"
+            };
+            builder.Entity<SpecialitiesCatalog>().HasData(odontologia);
+
+            var general = new SpecialitiesCatalog(){
+                Id = 5,
+                Type = "General"
+            };
+            builder.Entity<SpecialitiesCatalog>().HasData(general);
+            #endregion
+            
             #region ServiceCatalog
             var publicHospital = new ServicesCatalog(){
                 Id = 1,
@@ -85,6 +121,43 @@ namespace historial_blockchain.Contexts
                 NormalizedName = "Doctor"
             };
             builder.Entity<IdentityRole>().HasData(doctor);
+            #endregion
+      
+            #region HospitalConfiguration
+            builder.Entity<Hospital>()
+                .HasOne(x => x.Admin)
+                .WithOne(x => x.HospitalAdmin)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Hospital>()
+                .HasMany(x => x.Doctors)
+                .WithMany(x => x.Hospitals)
+                .UsingEntity<HospitalDoctor>(
+                    x => x.HasOne(x => x.Doctor)
+                        .WithMany().HasForeignKey(x => x.DoctorId),
+                    x => x.HasOne(x => x.Hospital)
+                        .WithMany().HasForeignKey(x => x.HospitalId)
+                );
+
+            builder.Entity<Hospital>()
+                .HasMany(x => x.Especialidades)
+                .WithMany(x => x.Hospitals)
+                .UsingEntity<HospitalEspecialidad>(
+                    x => x.HasOne(x => x.Especialidad)
+                        .WithMany().HasForeignKey(x => x.EspecialidadId),
+                    x => x.HasOne(x => x.Hospital)
+                        .WithMany().HasForeignKey(x => x.HospitalId)                   
+                );
+            
+            builder.Entity<Hospital>()
+                .HasMany(x => x.Consultas)
+                .WithMany(x => x.Hospitals)
+                .UsingEntity<HospitalConsulta>(
+                    x => x.HasOne(x => x.Consulta)
+                        .WithMany().HasForeignKey(x => x.ConsultaId),
+                    x => x.HasOne(x => x.Hospital)
+                        .WithMany().HasForeignKey(x => x.HospitalId)                   
+                );
             #endregion
             
             base.OnModelCreating(builder);

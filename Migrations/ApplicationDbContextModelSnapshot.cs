@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using historial_blockchain.Contexts;
 
-namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
+namespace historial_blockchain.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -48,36 +48,36 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                     b.HasData(
                         new
                         {
-                            Id = "25e9abb4-4ba4-4177-b048-c302b57e42f9",
-                            ConcurrencyStamp = "a1b90b7a-ea46-42ac-8985-b62e19c0bba8",
+                            Id = "3a48973b-59ba-4770-a80d-e52206c36ddf",
+                            ConcurrencyStamp = "21871d31-83de-45e7-9071-aabd13fad1ac",
                             Name = "SysAdmin",
                             NormalizedName = "SysAdmin"
                         },
                         new
                         {
-                            Id = "d7ee7bdd-8443-4d46-83d1-47846b865a9d",
-                            ConcurrencyStamp = "e0069305-3a22-4371-a162-d32e9bdc2e49",
+                            Id = "c834067f-cead-4915-9c17-0d9714102fdf",
+                            ConcurrencyStamp = "3422586d-0f84-4864-b79c-0a1b9bd85324",
                             Name = "PacsAdmin",
                             NormalizedName = "PacsAdmin"
                         },
                         new
                         {
-                            Id = "23d29712-6c1d-43fd-934f-4d099dacacd3",
-                            ConcurrencyStamp = "5437e09c-1240-4050-b458-1cd18fa94f94",
+                            Id = "2b26070f-49df-46f7-88b2-6d5945284dc2",
+                            ConcurrencyStamp = "fed665c2-b13d-4de8-8c59-9cc8e9bd4f3f",
                             Name = "ClinicAdmin",
                             NormalizedName = "ClinicAdmin"
                         },
                         new
                         {
-                            Id = "e8d22924-ec55-4ccf-85f7-425ec379eb8a",
-                            ConcurrencyStamp = "c5ea6033-e12c-4b16-bc98-1c01f553ab3c",
+                            Id = "e411d73d-ce17-4809-a982-38b8ae41e12e",
+                            ConcurrencyStamp = "75cb6837-688d-4d0b-9927-bdaf85e0d089",
                             Name = "Pacient",
                             NormalizedName = "Pacient"
                         },
                         new
                         {
-                            Id = "fb081bd5-5380-4a99-8937-194c33d53694",
-                            ConcurrencyStamp = "c215a32c-633d-48e1-ab3f-b915cf25adbc",
+                            Id = "76d14537-a2f9-43af-88de-085178566ff2",
+                            ConcurrencyStamp = "4ce71a94-eaba-415e-87a1-e9eedacd9838",
                             Name = "Doctor",
                             NormalizedName = "Doctor"
                         });
@@ -187,9 +187,32 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("historial_blockchain.Entities.Hospital", b =>
+            modelBuilder.Entity("historial_blockchain.Entities.Consulta", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DoctorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PacienteId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("PacienteId");
+
+                    b.ToTable("Consultas");
+                });
+
+            modelBuilder.Entity("historial_blockchain.Entities.Hospital", b =>
+                {
+                    b.Property<string>("HospitalId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AdminId")
@@ -212,13 +235,64 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                     b.Property<int>("ServiceCatalogId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("HospitalId");
 
-                    b.HasIndex("AdminId");
+                    b.HasIndex("AdminId")
+                        .IsUnique();
 
                     b.HasIndex("ServiceCatalogId");
 
                     b.ToTable("Hospitals");
+                });
+
+            modelBuilder.Entity("historial_blockchain.Entities.HospitalConsulta", b =>
+                {
+                    b.Property<string>("ConsultaId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("HospitalId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ConsultaId", "HospitalId");
+
+                    b.HasIndex("HospitalId");
+
+                    b.ToTable("HospitalConsulta");
+                });
+
+            modelBuilder.Entity("historial_blockchain.Entities.HospitalDoctor", b =>
+                {
+                    b.Property<string>("DoctorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("HospitalId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("EspecialidadId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DoctorId", "HospitalId");
+
+                    b.HasIndex("EspecialidadId");
+
+                    b.HasIndex("HospitalId");
+
+                    b.ToTable("HospitalDoctor");
+                });
+
+            modelBuilder.Entity("historial_blockchain.Entities.HospitalEspecialidad", b =>
+                {
+                    b.Property<int>("EspecialidadId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HospitalId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("EspecialidadId", "HospitalId");
+
+                    b.HasIndex("HospitalId");
+
+                    b.ToTable("HospitalEspecialidad");
                 });
 
             modelBuilder.Entity("historial_blockchain.Entities.ServicesCatalog", b =>
@@ -266,6 +340,48 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                         });
                 });
 
+            modelBuilder.Entity("historial_blockchain.Entities.SpecialitiesCatalog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpecialitiesCatalog");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Type = "Pediatría"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Type = "Ginecología"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Type = "Geriatría"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Type = "Odontología"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Type = "General"
+                        });
+                });
+
             modelBuilder.Entity("historial_blockchain.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -289,9 +405,6 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("HospitalId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -332,8 +445,6 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HospitalId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -397,12 +508,27 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("historial_blockchain.Entities.Consulta", b =>
+                {
+                    b.HasOne("historial_blockchain.Models.ApplicationUser", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId");
+
+                    b.HasOne("historial_blockchain.Models.ApplicationUser", "Paciente")
+                        .WithMany()
+                        .HasForeignKey("PacienteId");
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Paciente");
+                });
+
             modelBuilder.Entity("historial_blockchain.Entities.Hospital", b =>
                 {
                     b.HasOne("historial_blockchain.Models.ApplicationUser", "Admin")
-                        .WithMany()
-                        .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne("HospitalAdmin")
+                        .HasForeignKey("historial_blockchain.Entities.Hospital", "AdminId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("historial_blockchain.Entities.ServicesCatalog", "ServicesCatalog")
@@ -416,13 +542,74 @@ namespace historial_blockchain.Migrations.MigrationsApplicationDbContext
                     b.Navigation("ServicesCatalog");
                 });
 
-            modelBuilder.Entity("historial_blockchain.Models.ApplicationUser", b =>
+            modelBuilder.Entity("historial_blockchain.Entities.HospitalConsulta", b =>
                 {
+                    b.HasOne("historial_blockchain.Entities.Consulta", "Consulta")
+                        .WithMany()
+                        .HasForeignKey("ConsultaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("historial_blockchain.Entities.Hospital", "Hospital")
                         .WithMany()
-                        .HasForeignKey("HospitalId");
+                        .HasForeignKey("HospitalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Consulta");
 
                     b.Navigation("Hospital");
+                });
+
+            modelBuilder.Entity("historial_blockchain.Entities.HospitalDoctor", b =>
+                {
+                    b.HasOne("historial_blockchain.Models.ApplicationUser", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("historial_blockchain.Entities.SpecialitiesCatalog", "Especialidad")
+                        .WithMany()
+                        .HasForeignKey("EspecialidadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("historial_blockchain.Entities.Hospital", "Hospital")
+                        .WithMany()
+                        .HasForeignKey("HospitalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Especialidad");
+
+                    b.Navigation("Hospital");
+                });
+
+            modelBuilder.Entity("historial_blockchain.Entities.HospitalEspecialidad", b =>
+                {
+                    b.HasOne("historial_blockchain.Entities.SpecialitiesCatalog", "Especialidad")
+                        .WithMany()
+                        .HasForeignKey("EspecialidadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("historial_blockchain.Entities.Hospital", "Hospital")
+                        .WithMany()
+                        .HasForeignKey("HospitalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Especialidad");
+
+                    b.Navigation("Hospital");
+                });
+
+            modelBuilder.Entity("historial_blockchain.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("HospitalAdmin");
                 });
 #pragma warning restore 612, 618
         }

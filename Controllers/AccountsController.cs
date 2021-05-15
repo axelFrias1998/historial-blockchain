@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using historial_blockchain.Models.DTOs;
+using historial_blockchain.Entities;
 
 namespace historial_blockchain.Contexts
 {
@@ -21,15 +22,17 @@ namespace historial_blockchain.Contexts
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AccountsController : ControllerBase
     {
+        private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
 
-        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
+        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            this.context = context;
         }
 
         [AllowAnonymous]
@@ -102,20 +105,25 @@ namespace historial_blockchain.Contexts
 
         [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
         [HttpPost(Name = "CreateDoctor")]
-        public async Task<ActionResult> CreateDoctorAccount([FromBody] DoctorHospitalDTO doctorHospital)
+        public async Task<ActionResult> CreateDoctorAccount([FromBody] HospitalDoctorDTO hospitalDoctor)
         {
             var user = new ApplicationUser { 
-                Apellido = doctorHospital.UserInfo.Apellido,
-                Email = doctorHospital.UserInfo.Email, 
-                Nombre = doctorHospital.UserInfo.Nombre,
-                PhoneNumber = doctorHospital.UserInfo.PhoneNumber,
-                UserName = doctorHospital.UserInfo.UserName, 
-                HospitalId = doctorHospital.HospitalId
+                Apellido = hospitalDoctor.UserInfo.Apellido,
+                Email = hospitalDoctor.UserInfo.Email, 
+                Nombre = hospitalDoctor.UserInfo.Nombre,
+                PhoneNumber = hospitalDoctor.UserInfo.PhoneNumber,
+                UserName = hospitalDoctor.UserInfo.UserName, 
             };
-            var result = await _userManager.CreateAsync(user, doctorHospital.UserInfo.Password);
+            var result = await _userManager.CreateAsync(user, hospitalDoctor.UserInfo.Password);
             if(result.Succeeded)
             {
-                var userData = await _userManager.FindByEmailAsync(doctorHospital.UserInfo.Email);
+                var userData = await _userManager.FindByEmailAsync(hospitalDoctor.UserInfo.Email);
+                
+                var hospital = await context.Hospitals.FindAsync(hospitalDoctor.HospitalId);
+                
+                hospital.Doctors.Add(userData);
+                context.SaveChanges();
+
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Doctor"));
                 await _userManager.AddToRoleAsync(userData, "Doctor");
                 return new CreatedAtActionResult("GetAccountInfo", "Accounts", new { id = userData.Id }, userData);
