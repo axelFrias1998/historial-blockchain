@@ -51,7 +51,7 @@
             {
               "kind": "v12.0",
               "location": "[parameters('resourceLocation')]",
-              "name": "historial-blockchaindbserver",
+              "name": "historial-blockchain-server",
               "type": "Microsoft.Sql/servers",
               "apiVersion": "2017-10-01-preview"
             },
@@ -63,11 +63,11 @@
               },
               "kind": "v12.0,user",
               "location": "[parameters('resourceLocation')]",
-              "name": "historial-blockchaindbserver/historial-blockchain_db",
+              "name": "historial-blockchain-server/historial-blockchain_db",
               "type": "Microsoft.Sql/servers/databases",
               "apiVersion": "2017-10-01-preview",
               "dependsOn": [
-                "historial-blockchaindbserver"
+                "historial-blockchain-server"
               ]
             }
           ]

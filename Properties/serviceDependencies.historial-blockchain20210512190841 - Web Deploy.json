@@ -1,10 +1,10 @@
 {
   "dependencies": {
-    "mssql1": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/historial-blockchaindbserver/databases/historial-blockchain_db",
-      "type": "mssql.azure",
+    "mssql2": {
+      "type": "mssql",
       "connectionId": "DefaultConnection",
-      "secretStore": "AzureAppSettings"
+      "suggestion": "true",
+      "ignored": "true"
     }
   }
 }

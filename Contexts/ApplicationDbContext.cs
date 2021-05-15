@@ -59,28 +59,28 @@ namespace historial_blockchain.Contexts
             #region ServiceCatalog
             var publicHospital = new ServicesCatalog(){
                 Id = 1,
-                Type = "Hospital",
+                Type = "Hospital público",
                 IsPublic = true
             };
             builder.Entity<ServicesCatalog>().HasData(publicHospital);
 
             var privateHospital = new ServicesCatalog(){
                 Id = 2,
-                Type = "Hospital",
+                Type = "Hospital privado",
                 IsPublic = false
             };
             builder.Entity<ServicesCatalog>().HasData(privateHospital);
 
             var publicClinic = new ServicesCatalog(){
                 Id = 3,
-                Type = "Clínica",
+                Type = "Clínica pública",
                 IsPublic = true
             };
             builder.Entity<ServicesCatalog>().HasData(publicClinic);
 
             var privateClinic = new ServicesCatalog(){
                 Id = 4,
-                Type = "Clínica",
+                Type = "Clínica privada",
                 IsPublic = false
             };
             builder.Entity<ServicesCatalog>().HasData(privateClinic);

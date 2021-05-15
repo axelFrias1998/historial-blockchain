@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using historial_blockchain.Contexts;
+using historial_blockchain.Helpers;
 using historial_blockchain.Models;
 using historial_blockchain.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,14 +39,18 @@ namespace historial_blockchain
             services.AddScoped<HashService>();
             services.AddDataProtection();
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddControllers().AddNewtonsoftJson(
-                options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            services.AddControllers(options => 
+                {
+                    options.Filters.Add(typeof(FiltroErrores));
+                })
+                .AddNewtonsoftJson(
+                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
             
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -63,6 +68,7 @@ namespace historial_blockchain
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "historial_blockchain", Version = "v1" });
             });
+            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

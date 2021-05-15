@@ -4,9 +4,11 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>historial_blockchain</RootNamespace>
     <UserSecretsId>e558fb3a-5a9d-416e-9fb0-c92b104a66ea</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/665e484e-0859-403a-9231-ac8aeac9961a/resourcegroups/historial-blockchain/providers/Microsoft.Insights/components/historial-blockchain</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetcore.Authentication.JwtBearer" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
