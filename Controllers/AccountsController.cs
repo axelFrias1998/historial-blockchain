@@ -145,7 +145,7 @@ namespace historial_blockchain.Contexts
             return BadRequest(ModelState);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpDelete("DeleteDoctor")]
         public async Task<ActionResult<UserToken>> DeleteDoctor([FromBody] UserLogin userLogin)
         {
