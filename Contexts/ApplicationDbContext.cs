@@ -54,6 +54,12 @@ namespace historial_blockchain.Contexts
                 Type = "General"
             };
             builder.Entity<SpecialitiesCatalog>().HasData(general);
+
+            var prueba = new SpecialitiesCatalog(){
+                Id = 6,
+                Type = "Prueba"
+            };
+            builder.Entity<SpecialitiesCatalog>().HasData(prueba);
             #endregion
             
             #region ServiceCatalog
