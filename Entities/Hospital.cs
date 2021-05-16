@@ -31,10 +31,12 @@ namespace historial_blockchain.Entities
         [Required, ForeignKey("ServicesCatalog")]
         public int ServiceCatalogId { get; set; }
 
-        public virtual ServicesCatalog ServicesCatalog { get; set; }
-
         [Required, ForeignKey("Admin")]
         public string AdminId { get; set; }
+
+        public bool IsEnable { get; set; }
+
+        public virtual ServicesCatalog ServicesCatalog { get; set; }
 
         public virtual ApplicationUser Admin { get; set; }
 

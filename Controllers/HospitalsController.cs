@@ -44,7 +44,7 @@ namespace historial_blockchain.Controllers
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
-        [HttpGet("{id}", Name = "GetHospitalInfo")]
+        [HttpGet("GetHospitalInfo/{id}")]
         public ActionResult<Hospital> GetHospitalInfo(string id)
         {
             var hospital = context.Hospitals.Include(x => x.Admin).FirstOrDefault(x => x.HospitalId.Equals(id));
@@ -55,7 +55,7 @@ namespace historial_blockchain.Controllers
 
         [Authorize(Roles = "SysAdmin")]
         [HttpPost]
-        public ActionResult InsertHospital([FromBody] HospitalInfo hospitalInfo)
+        public async Task<ActionResult> CreateHospital([FromBody] HospitalInfo hospitalInfo)
         {
             Hospital hospital = new Hospital{
                 HospitalId = Guid.NewGuid().ToString(),
@@ -63,12 +63,29 @@ namespace historial_blockchain.Controllers
                 PhoneNumber = hospitalInfo.PhoneNumber,
                 RegisterDate = DateTime.Now,
                 ServiceCatalogId = hospitalInfo.ServiceCatalogId,
-                AdminId = hospitalInfo.AdminId
+                AdminId = hospitalInfo.AdminId,
+                IsEnable = true
             };
+            await context.Hospitals.AddAsync(hospital);
+            await context.SaveChangesAsync();
+            return new CreatedAtActionResult("GetHospitalInfo/{id}", "Hospitals", new { id = hospital.HospitalId }, hospital);
+        }
 
-            context.Hospitals.Add(hospital);
-            context.SaveChanges();
-            return new CreatedAtActionResult("GetHospitalInfo", "Hospitals", new { id = hospital.HospitalId }, hospital);
+        [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
+        [HttpPost("AddHospitalSpeciality")]
+        public async Task<ActionResult> CreateSpeciality([FromBody] HospitalSpeciality hospitalSpecialityDTO)
+        {
+            if(ModelState.IsValid)
+            {
+                await context.HospitalEspecialidades.AddAsync(new HospitalEspecialidad{
+                    EspecialidadId = hospitalSpecialityDTO.EspecialidadId,
+                    HospitalId = hospitalSpecialityDTO.HospitalId
+                });
+                if(await context.SaveChangesAsync() == 1)
+                    return new CreatedAtActionResult("GetSpecialitiesCatalog", "SpecialitiesCatalog", null, null);
+            }
+            ModelState.AddModelError(string.Empty, "Especialidad no pudo ser asignada al hospital");
+            return BadRequest(ModelState);
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
@@ -82,7 +99,7 @@ namespace historial_blockchain.Controllers
             return Ok();
         }
 
-        [HttpPut("AssignAdministrator")]
+        /*[HttpPut("AssignAdministrator")]
         public async Task<ActionResult> AssignAdministrator(HospitalAdminDTO hospitalIdentification)
         {
             var hospital = await context.Hospitals.FindAsync(hospitalIdentification.HospitalId);
@@ -92,7 +109,7 @@ namespace historial_blockchain.Controllers
             context.Entry(hospital).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return Ok();
-        }
+        }*/
         
         [HttpDelete("{id}")]
         public ActionResult<Hospital> Delete(string id)

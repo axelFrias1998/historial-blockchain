@@ -35,8 +35,9 @@ namespace historial_blockchain.Contexts
             this.context = context;
         }
 
+        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [AllowAnonymous]
-        [HttpGet("{id}", Name = "GetAccountInfo")]
+        [HttpGet("GetAccountInfo/{id}")]
         public async Task<ActionResult<ApplicationUser>> GetAccountInfo(string id)
         {
             var account = await _userManager.FindByIdAsync(id); 
@@ -49,7 +50,7 @@ namespace historial_blockchain.Contexts
         [HttpPost("CreateAccount")]
         public async Task<ActionResult<UserToken>> CreateAccount([FromBody] UserInfo userInfo)
         {
-            var user = new ApplicationUser { 
+            var user = new ApplicationUser {
                 Apellido = userInfo.Apellido,
                 Email = userInfo.Email, 
                 Nombre = userInfo.Nombre,
@@ -76,8 +77,8 @@ namespace historial_blockchain.Contexts
         }
 
         [Authorize(Roles = "SysAdmin")]
-        [HttpPost("{type}", Name = "CreateAdmin")]
-        public async Task<ActionResult> CreateAdminAccount([FromBody] UserInfo userInfo, bool type)
+        [HttpPost("CreateAdmin/{type}")]
+        public async Task<IActionResult> CreateAdminAccount([FromBody] UserInfo userInfo, bool type)
         {
             var user = new ApplicationUser { 
                 Apellido = userInfo.Apellido,
@@ -98,32 +99,26 @@ namespace historial_blockchain.Contexts
                 }
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, roleName));
                 await _userManager.AddToRoleAsync(userData, roleName);
-                return new CreatedAtActionResult("GetAccountInfo", "Accounts", new { id = userData.Id }, userData);
+                return new CreatedAtActionResult("GetAccountInfo/{id}", "Accounts", new { id = userData.Id }, userData);
             }
             return BadRequest("Datos incorrectos");
         }
 
         [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
-        [HttpPost(Name = "CreateDoctor")]
-        public async Task<ActionResult> CreateDoctorAccount([FromBody] HospitalDoctorDTO hospitalDoctor)
+        [HttpPost("CreateDoctor")]
+        public async Task<ActionResult> CreateDoctorAccount([FromBody] UserInfo userInfo)
         {
             var user = new ApplicationUser { 
-                Apellido = hospitalDoctor.UserInfo.Apellido,
-                Email = hospitalDoctor.UserInfo.Email, 
-                Nombre = hospitalDoctor.UserInfo.Nombre,
-                PhoneNumber = hospitalDoctor.UserInfo.PhoneNumber,
-                UserName = hospitalDoctor.UserInfo.UserName, 
+                Apellido = userInfo.Apellido,
+                Email = userInfo.Email, 
+                Nombre = userInfo.Nombre,
+                PhoneNumber = userInfo.PhoneNumber,
+                UserName = userInfo.UserName, 
             };
-            var result = await _userManager.CreateAsync(user, hospitalDoctor.UserInfo.Password);
+            var result = await _userManager.CreateAsync(user, userInfo.Password);
             if(result.Succeeded)
             {
-                var userData = await _userManager.FindByEmailAsync(hospitalDoctor.UserInfo.Email);
-                
-                var hospital = await context.Hospitals.FindAsync(hospitalDoctor.HospitalId);
-                
-                hospital.Doctors.Add(userData);
-                context.SaveChanges();
-
+                var userData = await _userManager.FindByEmailAsync(userInfo.Email);
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Doctor"));
                 await _userManager.AddToRoleAsync(userData, "Doctor");
                 return new CreatedAtActionResult("GetAccountInfo", "Accounts", new { id = userData.Id }, userData);
@@ -165,7 +160,7 @@ namespace historial_blockchain.Contexts
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim("UserId", userId)
             };
 
             foreach (var role in roles)
@@ -174,7 +169,7 @@ namespace historial_blockchain.Contexts
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expiration = DateTime.UtcNow.AddHours(2);
+            var expiration = DateTime.UtcNow.AddDays(1);
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: null,
@@ -186,8 +181,7 @@ namespace historial_blockchain.Contexts
 
             return new UserToken(){
                 Expiration = expiration,
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                UserId = userId
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
             };
         }    
     }
