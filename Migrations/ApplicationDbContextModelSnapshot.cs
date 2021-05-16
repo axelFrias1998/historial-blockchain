@@ -48,36 +48,36 @@ namespace historial_blockchain.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d9d7a892-da98-4937-8500-77251882a5c7",
-                            ConcurrencyStamp = "215381ce-39a6-4d7b-b8f0-bdf55ca2e684",
+                            Id = "5043dbba-9e37-4057-8130-310f5b570d34",
+                            ConcurrencyStamp = "33cf1275-9670-45d8-897e-c33be9485931",
                             Name = "SysAdmin",
                             NormalizedName = "SysAdmin"
                         },
                         new
                         {
-                            Id = "03905782-71c8-4e18-81de-fda02e20636d",
-                            ConcurrencyStamp = "6eb7a32b-8d97-4f36-b669-cdacd072c290",
+                            Id = "78902708-5c20-4fba-9c7f-cf0bed718df6",
+                            ConcurrencyStamp = "1402de2a-a192-4bb4-a7a5-b993ed97ec6a",
                             Name = "PacsAdmin",
                             NormalizedName = "PacsAdmin"
                         },
                         new
                         {
-                            Id = "48e48a9d-7de1-469d-b0a1-46c71a805a9a",
-                            ConcurrencyStamp = "3a1acb2f-8b79-4fe3-9165-27e9a09e76a0",
+                            Id = "d1c569cc-5a38-4c4f-9071-d86300bf3832",
+                            ConcurrencyStamp = "fac9a681-52b9-478c-be42-c7892e2b5017",
                             Name = "ClinicAdmin",
                             NormalizedName = "ClinicAdmin"
                         },
                         new
                         {
-                            Id = "517ce587-6a78-45cb-8468-50d616b06a93",
-                            ConcurrencyStamp = "23a4e039-afb8-42d6-808e-4fef4ff9f1b0",
+                            Id = "2fa74b16-1af5-455b-bf88-09ce04585c45",
+                            ConcurrencyStamp = "59a81139-ebc7-4eda-ba5a-8611f8fe7221",
                             Name = "Pacient",
                             NormalizedName = "Pacient"
                         },
                         new
                         {
-                            Id = "0774e700-5569-4399-bcac-1408a8f36b07",
-                            ConcurrencyStamp = "18d81c1b-2a47-48a5-a136-de2410a9395d",
+                            Id = "0ecd109b-cd9f-40d5-b218-5c623cbe6bc2",
+                            ConcurrencyStamp = "a7d03417-4b4a-49f7-98c3-c9754ee9eb80",
                             Name = "Doctor",
                             NormalizedName = "Doctor"
                         });

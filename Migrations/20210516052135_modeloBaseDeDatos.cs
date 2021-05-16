@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace historial_blockchain.Migrations
 {
-    public partial class catalogoEspecialidades : Migration
+    public partial class modeloBaseDeDatos : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -318,11 +318,11 @@ namespace historial_blockchain.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "3a48973b-59ba-4770-a80d-e52206c36ddf", "21871d31-83de-45e7-9071-aabd13fad1ac", "SysAdmin", "SysAdmin" },
-                    { "c834067f-cead-4915-9c17-0d9714102fdf", "3422586d-0f84-4864-b79c-0a1b9bd85324", "PacsAdmin", "PacsAdmin" },
-                    { "2b26070f-49df-46f7-88b2-6d5945284dc2", "fed665c2-b13d-4de8-8c59-9cc8e9bd4f3f", "ClinicAdmin", "ClinicAdmin" },
-                    { "e411d73d-ce17-4809-a982-38b8ae41e12e", "75cb6837-688d-4d0b-9927-bdaf85e0d089", "Pacient", "Pacient" },
-                    { "76d14537-a2f9-43af-88de-085178566ff2", "4ce71a94-eaba-415e-87a1-e9eedacd9838", "Doctor", "Doctor" }
+                    { "5043dbba-9e37-4057-8130-310f5b570d34", "33cf1275-9670-45d8-897e-c33be9485931", "SysAdmin", "SysAdmin" },
+                    { "78902708-5c20-4fba-9c7f-cf0bed718df6", "1402de2a-a192-4bb4-a7a5-b993ed97ec6a", "PacsAdmin", "PacsAdmin" },
+                    { "d1c569cc-5a38-4c4f-9071-d86300bf3832", "fac9a681-52b9-478c-be42-c7892e2b5017", "ClinicAdmin", "ClinicAdmin" },
+                    { "2fa74b16-1af5-455b-bf88-09ce04585c45", "59a81139-ebc7-4eda-ba5a-8611f8fe7221", "Pacient", "Pacient" },
+                    { "0ecd109b-cd9f-40d5-b218-5c623cbe6bc2", "a7d03417-4b4a-49f7-98c3-c9754ee9eb80", "Doctor", "Doctor" }
                 });
 
             migrationBuilder.InsertData(
@@ -330,10 +330,10 @@ namespace historial_blockchain.Migrations
                 columns: new[] { "Id", "IsPublic", "Type" },
                 values: new object[,]
                 {
-                    { 1, true, "Hospital" },
-                    { 2, false, "Hospital" },
-                    { 3, true, "Clínica" },
-                    { 4, false, "Clínica" }
+                    { 1, true, "Hospital público" },
+                    { 2, false, "Hospital privado" },
+                    { 3, true, "Clínica pública" },
+                    { 4, false, "Clínica privada" }
                 });
 
             migrationBuilder.InsertData(
@@ -345,7 +345,8 @@ namespace historial_blockchain.Migrations
                     { 2, "Ginecología" },
                     { 3, "Geriatría" },
                     { 4, "Odontología" },
-                    { 5, "General" }
+                    { 5, "General" },
+                    { 6, "Prueba" }
                 });
 
             migrationBuilder.CreateIndex(

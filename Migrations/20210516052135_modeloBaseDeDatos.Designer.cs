@@ -10,8 +10,8 @@ using historial_blockchain.Contexts;
 namespace historial_blockchain.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210515071543_cambioNombresServiceCatalog")]
-    partial class cambioNombresServiceCatalog
+    [Migration("20210516052135_modeloBaseDeDatos")]
+    partial class modeloBaseDeDatos
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,36 +50,36 @@ namespace historial_blockchain.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cccd40b3-4b72-4e88-a2fd-4f68eeb4c1ad",
-                            ConcurrencyStamp = "29340f91-031c-4cd8-9a37-7cd3dc2463ed",
+                            Id = "5043dbba-9e37-4057-8130-310f5b570d34",
+                            ConcurrencyStamp = "33cf1275-9670-45d8-897e-c33be9485931",
                             Name = "SysAdmin",
                             NormalizedName = "SysAdmin"
                         },
                         new
                         {
-                            Id = "dd0f0e3b-34a9-436c-9ab3-a18cdf88df5c",
-                            ConcurrencyStamp = "87043657-95aa-4321-9df4-eee230e829b5",
+                            Id = "78902708-5c20-4fba-9c7f-cf0bed718df6",
+                            ConcurrencyStamp = "1402de2a-a192-4bb4-a7a5-b993ed97ec6a",
                             Name = "PacsAdmin",
                             NormalizedName = "PacsAdmin"
                         },
                         new
                         {
-                            Id = "b1bc64da-7c47-4267-8314-e1b9d738bcd4",
-                            ConcurrencyStamp = "68e39c5f-2173-4a6f-bd0e-0de0322f41d8",
+                            Id = "d1c569cc-5a38-4c4f-9071-d86300bf3832",
+                            ConcurrencyStamp = "fac9a681-52b9-478c-be42-c7892e2b5017",
                             Name = "ClinicAdmin",
                             NormalizedName = "ClinicAdmin"
                         },
                         new
                         {
-                            Id = "3313023a-0ba4-4289-bc5b-391923bfd40c",
-                            ConcurrencyStamp = "fd170dcc-8734-4c4d-8e6a-0f5d2e32d152",
+                            Id = "2fa74b16-1af5-455b-bf88-09ce04585c45",
+                            ConcurrencyStamp = "59a81139-ebc7-4eda-ba5a-8611f8fe7221",
                             Name = "Pacient",
                             NormalizedName = "Pacient"
                         },
                         new
                         {
-                            Id = "6ba980cd-9f27-4ce5-af83-4c4028a22efa",
-                            ConcurrencyStamp = "9443bd57-accf-4a60-b2e4-fcd95a407c61",
+                            Id = "0ecd109b-cd9f-40d5-b218-5c623cbe6bc2",
+                            ConcurrencyStamp = "a7d03417-4b4a-49f7-98c3-c9754ee9eb80",
                             Name = "Doctor",
                             NormalizedName = "Doctor"
                         });
@@ -381,6 +381,11 @@ namespace historial_blockchain.Migrations
                         {
                             Id = 5,
                             Type = "General"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Type = "Prueba"
                         });
                 });
 
