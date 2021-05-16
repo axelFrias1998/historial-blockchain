@@ -54,12 +54,6 @@ namespace historial_blockchain.Contexts
                 Type = "General"
             };
             builder.Entity<SpecialitiesCatalog>().HasData(general);
-
-            var prueba = new SpecialitiesCatalog(){
-                Id = 6,
-                Type = "Prueba"
-            };
-            builder.Entity<SpecialitiesCatalog>().HasData(prueba);
             #endregion
             
             #region ServiceCatalog
@@ -90,6 +84,13 @@ namespace historial_blockchain.Contexts
                 IsPublic = false
             };
             builder.Entity<ServicesCatalog>().HasData(privateClinic);
+
+            var publicRural = new ServicesCatalog(){
+                Id = 5,
+                Type = "Clínica rural pública",
+                IsPublic = false
+            };
+            builder.Entity<ServicesCatalog>().HasData(publicRural);
             #endregion
             
             #region IdentityRole
