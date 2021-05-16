@@ -41,7 +41,7 @@ namespace historial_blockchain
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -81,6 +81,9 @@ namespace historial_blockchain
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "historial_blockchain v1"));
             }
 
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "historial_blockchain v1"));
             app.UseHttpsRedirection();
             app.UseAuthentication();
             //app.UseCors(builder => builder.WithOrigins("https://localhost:5001"));
