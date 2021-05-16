@@ -27,26 +27,31 @@ namespace historial_blockchain.Contexts
         {
             #region SpecialitiesCatalog
             var pediatria = new SpecialitiesCatalog(){
+                Id = 1,
                 Type = "Pediatría"
             };
             builder.Entity<SpecialitiesCatalog>().HasData(pediatria);
 
             var ginecologia = new SpecialitiesCatalog(){
+                Id = 2,
                 Type = "Ginecología"
             };
             builder.Entity<SpecialitiesCatalog>().HasData(ginecologia);
 
             var geriatria = new SpecialitiesCatalog(){
+                Id = 3,
                 Type = "Geriatría"
             };
             builder.Entity<SpecialitiesCatalog>().HasData(geriatria);
 
             var odontologia = new SpecialitiesCatalog(){
+                Id = 4,
                 Type = "Odontología"
             };
             builder.Entity<SpecialitiesCatalog>().HasData(odontologia);
 
             var general = new SpecialitiesCatalog(){
+                Id = 5,
                 Type = "General"
             };
             builder.Entity<SpecialitiesCatalog>().HasData(general);
@@ -54,24 +59,28 @@ namespace historial_blockchain.Contexts
             
             #region ServiceCatalog
             var publicHospital = new ServicesCatalog(){
+                Id = 1,
                 Type = "Hospital público",
                 IsPublic = true
             };
             builder.Entity<ServicesCatalog>().HasData(publicHospital);
 
             var privateHospital = new ServicesCatalog(){
+                Id = 2,
                 Type = "Hospital privado",
                 IsPublic = false
             };
             builder.Entity<ServicesCatalog>().HasData(privateHospital);
 
             var publicClinic = new ServicesCatalog(){
+                Id = 3,
                 Type = "Clínica pública",
                 IsPublic = true
             };
             builder.Entity<ServicesCatalog>().HasData(publicClinic);
 
             var privateClinic = new ServicesCatalog(){
+                Id = 4,
                 Type = "Clínica privada",
                 IsPublic = false
             };
