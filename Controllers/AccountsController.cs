@@ -126,6 +126,7 @@ namespace historial_blockchain.Contexts
             return BadRequest("Datos incorrectos");
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<ActionResult<UserToken>> Login([FromBody] UserLogin userLogin)
         {
