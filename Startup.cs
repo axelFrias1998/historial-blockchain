@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using historial_blockchain.Contexts;
 using historial_blockchain.Helpers;
 using historial_blockchain.Models;
+using historial_blockchain.Models.DTOs;
 using historial_blockchain.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -36,10 +37,14 @@ namespace historial_blockchain
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddCors();
+            services.AddAutoMapper(Configuration => 
+            {
+                Configuration.CreateMap<ApplicationUser, CreatedUserDTO>();
+            } ,typeof(Startup));
             services.AddScoped<HashService>();
             services.AddDataProtection();
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));
             
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

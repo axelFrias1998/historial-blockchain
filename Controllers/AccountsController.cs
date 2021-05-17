@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using historial_blockchain.Models.DTOs;
 using historial_blockchain.Entities;
+using AutoMapper;
 
 namespace historial_blockchain.Contexts
 {
@@ -26,18 +27,20 @@ namespace historial_blockchain.Contexts
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper mapper;
 
-        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, ApplicationDbContext context)
+        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, ApplicationDbContext context, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             this.context = context;
+            this.mapper = mapper;
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [AllowAnonymous]
-        [HttpGet("GetAccountInfo/{id}")]
+        [HttpGet("GetAccountInfo/{id}", Name = "GetAccountInfo")]
         public async Task<ActionResult<ApplicationUser>> GetAccountInfo(string id)
         {
             var account = await _userManager.FindByIdAsync(id); 
@@ -76,9 +79,39 @@ namespace historial_blockchain.Contexts
             return BadRequest("Datos incorrectos");
         }
 
+        [AllowAnonymous]
+        [HttpPost("CreatePacientAccount")]
+        public async Task<ActionResult<UserToken>> CreatePacientAccount([FromBody] UserInfo userInfo)
+        {
+            var user = new ApplicationUser {
+                Apellido = userInfo.Apellido,
+                Email = userInfo.Email, 
+                Nombre = userInfo.Nombre,
+                PhoneNumber = userInfo.PhoneNumber,
+                UserName = userInfo.UserName, 
+            };
+            var result = await _userManager.CreateAsync(user, userInfo.Password);
+            if(result.Succeeded)
+            {
+                var userData = await _userManager.FindByEmailAsync(userInfo.Email);
+                await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Pacient"));
+                await _userManager.AddToRoleAsync(userData, "Pacient");
+                
+                var roles = await _userManager.GetRolesAsync(userData);
+                return BuildToken(
+                    new UserLogin {
+                        Username = userInfo.UserName,
+                        Password = userInfo.Password
+                    }, 
+                    roles,
+                    userData.Id);
+            }
+            return BadRequest("Datos incorrectos");
+        }
+
         [Authorize(Roles = "SysAdmin")]
         [HttpPost("CreateAdmin/{type}")]
-        public async Task<IActionResult> CreateAdminAccount([FromBody] UserInfo userInfo, bool type)
+        public async Task<ActionResult<CreatedUserDTO>> CreateAdminAccount([FromBody] UserInfo userInfo, bool type)
         {
             var user = new ApplicationUser { 
                 Apellido = userInfo.Apellido,
@@ -99,14 +132,16 @@ namespace historial_blockchain.Contexts
                 }
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, roleName));
                 await _userManager.AddToRoleAsync(userData, roleName);
-                return new CreatedAtActionResult("GetAccountInfo/{id}", "Accounts", new { id = userData.Id }, userData);
+
+                var adminDTO = mapper.Map<CreatedUserDTO>(userData);
+                return new CreatedAtRouteResult($"GetAccountInfo", new { id = adminDTO.Id}, adminDTO);
             }
             return BadRequest("Datos incorrectos");
         }
 
         [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
         [HttpPost("CreateDoctor")]
-        public async Task<ActionResult> CreateDoctorAccount([FromBody] UserInfo userInfo)
+        public async Task<ActionResult<CreatedUserDTO>> CreateDoctorAccount([FromBody] UserInfo userInfo)
         {
             var user = new ApplicationUser { 
                 Apellido = userInfo.Apellido,
@@ -121,7 +156,9 @@ namespace historial_blockchain.Contexts
                 var userData = await _userManager.FindByEmailAsync(userInfo.Email);
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Doctor"));
                 await _userManager.AddToRoleAsync(userData, "Doctor");
-                return new CreatedAtActionResult("GetAccountInfo", "Accounts", new { id = userData.Id }, userData);
+
+                var clinicAdminDTO = mapper.Map<CreatedUserDTO>(userData);
+                return new CreatedAtRouteResult($"GetAccountInfo", new { id = clinicAdminDTO.Id}, clinicAdminDTO);
             }
             return BadRequest("Datos incorrectos");
         }
@@ -141,7 +178,7 @@ namespace historial_blockchain.Contexts
             return BadRequest(ModelState);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
+        /*[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpDelete("DeleteDoctor")]
         public async Task<ActionResult<UserToken>> DeleteDoctor([FromBody] UserLogin userLogin)
         {
@@ -154,7 +191,7 @@ namespace historial_blockchain.Contexts
             }
             ModelState.AddModelError(string.Empty, "Ingreso fallido");
             return BadRequest(ModelState);
-        }
+        }*/
 
         private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId)
         {
