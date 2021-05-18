@@ -49,6 +49,17 @@ namespace historial_blockchain.Contexts
             return account;
         }
 
+        [Authorize(Roles = "SysAdmin")]
+        [HttpGet("GetAdmins/{type}")]
+        public async Task<ActionResult<IEnumerable<CreatedUserDTO>>> GetAdmins(bool type)
+        {
+            var admins = (IEnumerable<ApplicationUser>) await _userManager.GetUsersInRoleAsync((type) ? "PacsAdmin" : "ClinicAdmin");
+            if (admins is null)
+                return NotFound();
+            var adminsDTO = mapper.Map<List<CreatedUserDTO>>(admins);
+            return adminsDTO;
+        }
+
         [AllowAnonymous]
         [HttpPost("CreateAccount")]
         public async Task<ActionResult<UserToken>> CreateAccount([FromBody] UserInfo userInfo)
@@ -207,7 +218,8 @@ namespace historial_blockchain.Contexts
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expiration = DateTime.UtcNow.AddDays(1);
+            //TODO Reducir el tiempo del token. Está así por pruebas
+            var expiration = DateTime.UtcNow.AddDays(4);
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: null,

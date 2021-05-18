@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using historial_blockchain.Contexts;
+using historial_blockchain.Entities;
 using historial_blockchain.Helpers;
 using historial_blockchain.Models;
 using historial_blockchain.Models.DTOs;
@@ -40,6 +41,9 @@ namespace historial_blockchain
             services.AddAutoMapper(Configuration => 
             {
                 Configuration.CreateMap<ApplicationUser, CreatedUserDTO>();
+                Configuration.CreateMap<Hospital, CreatedHospitalDTO>();
+                Configuration.CreateMap<Hospital, HospitalsDTO>();
+                Configuration.CreateMap<ServicesCatalog, ServicesCatalogDTO>();
             } ,typeof(Startup));
             services.AddScoped<HashService>();
             services.AddDataProtection();
