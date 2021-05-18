@@ -36,7 +36,7 @@ namespace historial_blockchain.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<HospitalsDTO>>> GetHospitalsInfo()
         {
-            var hospitalsDto = mapper.Map<List<HospitalsDTO>>(context.Hospitals.Include(x => x.ServicesCatalog).Include(x => x.Admin).ToList());
+            var hospitalsDto = mapper.Map<List<HospitalsDTO>>(await context.Hospitals.Include(x => x.ServicesCatalog).Include(x => x.Admin).ToListAsync());
             if(hospitalsDto is null)
                 return NotFound();
             return hospitalsDto.ToList();
