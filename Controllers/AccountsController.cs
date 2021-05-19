@@ -41,9 +41,9 @@ namespace historial_blockchain.Contexts
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [AllowAnonymous]
         [HttpGet("GetAccountInfo/{id}", Name = "GetAccountInfo")]
-        public async Task<ActionResult<ApplicationUser>> GetAccountInfo(string id)
+        public async Task<ActionResult<CreatedUserDTO>> GetAccountInfo(string id)
         {
-            var account = await _userManager.FindByIdAsync(id); 
+            var account = mapper.Map<CreatedUserDTO>(await _userManager.FindByIdAsync(id)); 
             if(account is null)
                 return NotFound();
             return account;
