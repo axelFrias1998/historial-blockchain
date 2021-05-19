@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using historial_blockchain.Models.DTOs;
 using historial_blockchain.Entities;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace historial_blockchain.Contexts
 {
@@ -204,6 +205,24 @@ namespace historial_blockchain.Contexts
             return BadRequest(ModelState);
         }*/
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(string id, [FromBody] UpdateUserDTO updateUserDTO)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if(user is null)
+                return NotFound();
+            
+            user.Nombre = updateUserDTO.Nombre;
+            user.Apellido = updateUserDTO.Apellido;
+            user.UserName = updateUserDTO.UserName;
+            user.Email = updateUserDTO.Email;
+            user.PhoneNumber = updateUserDTO.PhoneNumber;
+            
+            context.Entry(user).State = EntityState.Modified;
+            context.SaveChanges();
+            return NoContent();
+        }
+
         private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId)
         {
             var claims = new List<Claim>
@@ -236,3 +255,6 @@ namespace historial_blockchain.Contexts
         }    
     }
 }
+
+//TODO PROBAR CREACIÓN de administradores, ACTUALIZACIÓN de datos propios (sysAdmin), leer administradores por rol y actualizar muchos a muchos administradores/hospitales
+//TODO

@@ -88,6 +88,6 @@ namespace historial_blockchain.Contexts
             return speciality;
         }
 
-        //TODO agregar eliminado y actualización de especialidades
+        //TODO probar edición y agregado de especialidades
     }
 }

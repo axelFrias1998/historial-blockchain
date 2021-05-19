@@ -101,7 +101,7 @@ namespace historial_blockchain.Controllers
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpPut("HospitalEnable/{id}/{enable}")]
-        public async Task<ActionResult> Put(string id, bool enable)
+        public async Task<ActionResult> PutEnable(string id, bool enable)
         {
             var hospital = await context.Hospitals.FirstOrDefaultAsync(x => x.HospitalId.Equals(id));
             if(hospital is null)
@@ -112,17 +112,21 @@ namespace historial_blockchain.Controllers
             return NoContent();
         }
 
-        /*[HttpPut("AssignAdministrator")]
-        public async Task<ActionResult> AssignAdministrator(HospitalAdminDTO hospitalIdentification)
+        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(string id, [FromBody] UpdateHospitalDTO updateHospitalDTO)
         {
-            var hospital = await context.Hospitals.FindAsync(hospitalIdentification.HospitalId);
-            if(hospital is null) 
-                return BadRequest();
-            hospital.AdminId = hospitalIdentification.UserId;
+            var hospital = await context.Hospitals.FirstOrDefaultAsync(x => x.HospitalId.Equals(id));
+            if(hospital is null)
+                return NotFound();
+
+            hospital.Name = updateHospitalDTO.Name;
+            hospital.PhoneNumber = updateHospitalDTO.PhoneNumber;
+
             context.Entry(hospital).State = EntityState.Modified;
-            await context.SaveChangesAsync();
-            return Ok();
-        }*/
+            context.SaveChanges();
+            return NoContent();
+        }
         
         [Authorize(Roles = "SysAdmin")]
         [HttpDelete("{id}")]
@@ -140,3 +144,5 @@ namespace historial_blockchain.Controllers
 
     }
 }
+
+//TODO PROBAR CREACIÓN, ACTUALIZACIÓN Y DESHABILITAR HOSPITALES
