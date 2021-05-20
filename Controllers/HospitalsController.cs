@@ -43,7 +43,7 @@ namespace historial_blockchain.Controllers
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
-        [HttpGet("{id}", Name = "GetHospitalInfo")]
+        [HttpGet("GetHospitalInfo/{id}", Name = "GetHospitalInfo")]
         public async Task<ActionResult<HospitalsDTO>> GetInfo(string id)
         {
             //var query =
@@ -87,7 +87,7 @@ namespace historial_blockchain.Controllers
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
-        [HttpPut("HospitalEnable/{id}/{enable}")]
+        [HttpPut("{id}/{enable}")]
         public async Task<ActionResult> PutEnable(string id, bool enable)
         {
             var hospital = await context.Hospitals.FirstOrDefaultAsync(x => x.HospitalId.Equals(id));
@@ -131,5 +131,3 @@ namespace historial_blockchain.Controllers
 
     }
 }
-
-//TODO PROBAR CREACIÓN, ACTUALIZACIÓN Y DESHABILITAR HOSPITALES

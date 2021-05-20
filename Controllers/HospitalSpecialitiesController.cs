@@ -49,7 +49,7 @@ namespace historial_blockchain.Controllers
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
-        [HttpGet("{hospitalId}/{specialityId}", Name = "HospitalSpeciality")]
+        [HttpGet("HospitalSpeciality/{hospitalId}/{specialityId}", Name = "HospitalSpeciality")]
         public async Task<ActionResult<HospitalSpecialitiesDTO>> GetHospitalSpecialitysAsync(string hospitalId, int specialityId)
         {
             var hospitalSpeciality = await context.HospitalEspecialidades.Where(x=> x.HospitalId.Equals(hospitalId))
@@ -101,3 +101,5 @@ namespace historial_blockchain.Controllers
         }
     }
 }
+
+//TODO probar obtener especialidades del hospital, obtener especialidad del hospital, agregar especialidad y borrar especialidad
