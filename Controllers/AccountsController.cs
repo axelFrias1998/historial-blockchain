@@ -153,20 +153,27 @@ namespace historial_blockchain.Contexts
 
         [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
         [HttpPost("CreateDoctor")]
-        public async Task<ActionResult<CreatedUserDTO>> CreateDoctorAccount([FromBody] UserInfo userInfo)
+        public async Task<ActionResult<CreatedUserDTO>> CreateDoctorAccount([FromBody] DoctorInfo doctorInfo)
         {
             var user = new ApplicationUser { 
-                Apellido = userInfo.Apellido,
-                Email = userInfo.Email, 
-                Nombre = userInfo.Nombre,
-                PhoneNumber = userInfo.PhoneNumber,
-                UserName = userInfo.UserName, 
+                Apellido = doctorInfo.Apellido,
+                Email = doctorInfo.Email, 
+                Nombre = doctorInfo.Nombre,
+                PhoneNumber = doctorInfo.PhoneNumber,
+                UserName = doctorInfo.UserName, 
             };
-            var result = await _userManager.CreateAsync(user, userInfo.Password);
+            var result = await _userManager.CreateAsync(user, doctorInfo.Password);
             if(result.Succeeded)
             {
-                var userData = await _userManager.FindByEmailAsync(userInfo.Email);
+                var userData = await _userManager.FindByEmailAsync(doctorInfo.Email);
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Doctor"));
+
+                var hospital = await context.Hospitals.FirstOrDefaultAsync(x => x.AdminId.Equals(doctorInfo.AdminId));
+                await context.HospitalDoctor.AddAsync(new HospitalDoctor{
+                    HospitalId = hospital.HospitalId,
+                    EspecialidadId = doctorInfo.EspecialidadId,
+                    DoctorId = userData.Id
+                });
                 await _userManager.AddToRoleAsync(userData, "Doctor");
 
                 var clinicAdminDTO = mapper.Map<CreatedUserDTO>(userData);
@@ -238,7 +245,7 @@ namespace historial_blockchain.Contexts
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             //TODO Reducir el tiempo del token. Está así por pruebas
-            var expiration = DateTime.UtcNow.AddDays(4);
+            var expiration = DateTime.UtcNow.AddDays(15);
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: null,

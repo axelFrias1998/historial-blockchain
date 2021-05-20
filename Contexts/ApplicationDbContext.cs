@@ -18,6 +18,7 @@ namespace historial_blockchain.Contexts
         public DbSet<ServicesCatalog> ServicesCatalog { get; set; }
         public DbSet<SpecialitiesCatalog> SpecialitiesCatalog { get; set; }
         public DbSet<HospitalEspecialidad> HospitalEspecialidades { get; set;}
+        public DbSet<HospitalDoctor> HospitalDoctor { get; set; }
 
 
         //public DbSet<Consulta> Consulta { get; set; }

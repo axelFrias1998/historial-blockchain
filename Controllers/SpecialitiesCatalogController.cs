@@ -32,19 +32,20 @@ namespace historial_blockchain.Contexts
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SpecialitiesCatalog>>>  GetSpecialities()
+        public async Task<ActionResult<IEnumerable<SpecialitiesDTO>>>  GetSpecialities()
         {
             var specialitiescatalog = await _context.SpecialitiesCatalog.ToListAsync();
             if(specialitiescatalog is null)
                 return NotFound();
-            return specialitiescatalog;
+            var specialitiesDTO = mapper.Map<List<SpecialitiesDTO>>(specialitiescatalog);
+            return specialitiesDTO;
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet("{id}", Name = "SpecialityInfo")]
-        public async Task<ActionResult<SpecialitiesDTO>> GetSpecialityInfo(string id)
+        public async Task<ActionResult<SpecialitiesDTO>> GetSpecialityInfo(int id)
         {
-            var specialitiescatalog = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            var specialitiescatalog = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id == id);
             if(specialitiescatalog is null)
                 return NotFound();
             var specialityDTO = mapper.Map<SpecialitiesDTO>(specialitiescatalog);
@@ -56,18 +57,18 @@ namespace historial_blockchain.Contexts
         [Authorize(Roles = "SysAdmin")]
         [HttpPost]
         public async Task<ActionResult> CreateSpeciality([FromBody] SpecialityName specialityName)
-    {
+        {
             await _context.SpecialitiesCatalog.AddAsync(new SpecialitiesCatalog { Type = specialityName.Name });
             await _context.SaveChangesAsync();
             var speciality = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Type.Equals(specialityName.Name));
-            return new CreatedAtActionResult("SpecialityInfo", "Specialities", new { id = speciality.Id}, specialityName);
+            return new CreatedAtRouteResult("SpecialityInfo", new { id = speciality.Id}, specialityName);
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpPut("{id}/{newName}")]
-        public async Task<ActionResult> Put(string id, string newName)
+        public async Task<ActionResult> Put(int id, string newName)
         {
-            var speciality = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            var speciality = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id == (id));
             if(speciality is null)
                 return NotFound();
             speciality.Type = newName;
@@ -78,14 +79,14 @@ namespace historial_blockchain.Contexts
 
         [Authorize(Roles = "SysAdmin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<SpecialitiesCatalog>> Delete(string id)
+        public async Task<ActionResult<SpecialitiesDTO>> Delete(int id)
         {
-            var speciality = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            var speciality = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id == (id));
             if(speciality is null)
                 return NotFound();
             _context.SpecialitiesCatalog.Remove(speciality);
             _context.SaveChanges();
-            return speciality;
+            return mapper.Map<SpecialitiesDTO>(speciality);
         }
 
         //TODO probar edición y agregado de especialidades

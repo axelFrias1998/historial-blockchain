@@ -46,6 +46,11 @@ namespace historial_blockchain.Controllers
         [HttpGet("{id}", Name = "GetHospitalInfo")]
         public async Task<ActionResult<HospitalsDTO>> GetInfo(string id)
         {
+            //var query =
+            //    from foo in db.Foos
+            //    where foo.ID == 45
+            //    from bar in foo.Bars
+            //    select bar;
             var hospital = mapper.Map<HospitalsDTO>(await context.Hospitals.Include(x => x.Admin).Include(x => x.ServicesCatalog).FirstOrDefaultAsync(x => x.HospitalId.Equals(id)));
             if(hospital is null)
                 return NotFound();
