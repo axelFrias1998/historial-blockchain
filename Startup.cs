@@ -45,6 +45,7 @@ namespace historial_blockchain
                 Configuration.CreateMap<Hospital, HospitalsDTO>();
                 Configuration.CreateMap<ServicesCatalog, ServicesCatalogDTO>();
                 Configuration.CreateMap<SpecialitiesCatalog, SpecialitiesDTO>();
+                Configuration.CreateMap<HospitalSpecialitiesDTO, HospitalEspecialidad>().ReverseMap();
             } ,typeof(Startup));
             services.AddScoped<HashService>();
             services.AddDataProtection();

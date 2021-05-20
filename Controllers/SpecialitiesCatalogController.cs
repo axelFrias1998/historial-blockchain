@@ -85,7 +85,7 @@ namespace historial_blockchain.Contexts
             if(speciality is null)
                 return NotFound();
             _context.SpecialitiesCatalog.Remove(speciality);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return mapper.Map<SpecialitiesDTO>(speciality);
         }
 

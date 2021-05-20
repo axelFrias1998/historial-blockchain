@@ -174,6 +174,7 @@ namespace historial_blockchain.Contexts
                     EspecialidadId = doctorInfo.EspecialidadId,
                     DoctorId = userData.Id
                 });
+                await context.SaveChangesAsync();
                 await _userManager.AddToRoleAsync(userData, "Doctor");
 
                 var clinicAdminDTO = mapper.Map<CreatedUserDTO>(userData);
@@ -264,4 +265,3 @@ namespace historial_blockchain.Contexts
 }
 
 //TODO PROBAR CREACIÓN de administradores, ACTUALIZACIÓN de datos propios (sysAdmin), leer administradores por rol y actualizar muchos a muchos administradores/hospitales
-//TODO

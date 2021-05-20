@@ -77,24 +77,6 @@ namespace historial_blockchain.Controllers
             return new CreatedAtRouteResult($"GetHospitalInfo", new { id = hospitalDTO.HospitalId}, hospitalDTO);
         }
 
-        //TODO Probar con un Pacs Admin y un Clinic admin
-        [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
-        [HttpPost("AddSpeciality")]
-        public async Task<ActionResult> AddSpeciality([FromBody] HospitalSpeciality hospitalSpecialityDTO)
-        {
-            if(ModelState.IsValid)
-            {
-                await context.HospitalEspecialidades.AddAsync(new HospitalEspecialidad{
-                    EspecialidadId = hospitalSpecialityDTO.EspecialidadId,
-                    HospitalId = hospitalSpecialityDTO.HospitalId
-                });
-                return new CreatedAtRouteResult($"GetSpecialities", new { id = hospitalSpecialityDTO.HospitalId}, hospitalSpecialityDTO);
-            }
-            ModelState.AddModelError(string.Empty, "Especialidad no pudo ser asignada al hospital");
-            return BadRequest(ModelState);
-        }
-
-
         [HttpGet("GetSpecialities/{id}", Name = "GetSpecialities")]
         public async Task<ActionResult<IEnumerable<HospitalEspecialidad>>> GetSpecialities(string id)
         {
