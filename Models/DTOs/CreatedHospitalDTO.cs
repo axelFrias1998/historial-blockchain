@@ -7,7 +7,5 @@ namespace historial_blockchain.Models.DTOs
         public string Name { get; set; }
 
         public string PhoneNumber { get; set; }
-
-        public string AdminId { get; set; }
     }
 }

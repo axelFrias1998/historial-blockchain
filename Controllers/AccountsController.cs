@@ -16,6 +16,7 @@ using historial_blockchain.Models.DTOs;
 using historial_blockchain.Entities;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using historial_blockchain.Enums;
 
 namespace historial_blockchain.Contexts
 {
@@ -50,6 +51,7 @@ namespace historial_blockchain.Contexts
             return account;
         }
 
+        //TODO obtener administradores que no estén registrados en un hospital
         [Authorize(Roles = "SysAdmin")]
         [HttpGet("GetAdmins/{type}")]
         public async Task<ActionResult<IEnumerable<CreatedUserDTO>>> GetAdmins(bool type)
@@ -168,7 +170,8 @@ namespace historial_blockchain.Contexts
                 var userData = await _userManager.FindByEmailAsync(doctorInfo.Email);
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Doctor"));
 
-                var hospital = await context.Hospitals.FirstOrDefaultAsync(x => x.AdminId.Equals(doctorInfo.AdminId));
+                var hospital = await context.HospitalAdministrador.FirstOrDefaultAsync(x => x.AdminId.Equals(doctorInfo.AdminId));
+                
                 await context.HospitalDoctor.AddAsync(new HospitalDoctor{
                     HospitalId = hospital.HospitalId,
                     EspecialidadId = doctorInfo.EspecialidadId,
@@ -229,6 +232,40 @@ namespace historial_blockchain.Contexts
             context.Entry(user).State = EntityState.Modified;
             context.SaveChanges();
             return NoContent();
+        }
+
+        //TODO Agregar el enumerable a los
+        private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId, UserType userType)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Username),
+                new Claim("UserId", userId)
+            };
+
+            foreach (var role in roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
+
+            
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            //TODO Reducir el tiempo del token. Está así por pruebas
+            var expiration = DateTime.UtcNow.AddDays(15);
+
+            JwtSecurityToken token = new JwtSecurityToken(
+                issuer: null,
+                audience: null,
+                claims: claims,
+                expires: expiration,
+                signingCredentials: creds
+            );
+
+            return new UserToken(){
+                Expiration = expiration,
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
+            };
         }
 
         private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId)

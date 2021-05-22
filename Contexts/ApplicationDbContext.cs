@@ -19,6 +19,8 @@ namespace historial_blockchain.Contexts
         public DbSet<SpecialitiesCatalog> SpecialitiesCatalog { get; set; }
         public DbSet<HospitalEspecialidad> HospitalEspecialidades { get; set;}
         public DbSet<HospitalDoctor> HospitalDoctor { get; set; }
+        public DbSet<HospitalAdministrador> HospitalAdministrador { get; set; }
+
 
 
         //public DbSet<Consulta> Consulta { get; set; }
@@ -126,10 +128,16 @@ namespace historial_blockchain.Contexts
             #endregion
       
             #region HospitalConfiguration
+
             builder.Entity<Hospital>()
-                .HasOne(x => x.Admin)
-                .WithOne(x => x.HospitalAdmin)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasMany(x => x.Admins)
+                .WithMany(x => x.HospitalsAdmins)
+                .UsingEntity<HospitalAdministrador>(
+                    x => x.HasOne(x => x.Admin)
+                        .WithMany().HasForeignKey(x => x.AdminId),
+                    x => x.HasOne(x => x.Hospital)
+                        .WithMany().HasForeignKey(x => x.HospitalId)
+                );
 
             builder.Entity<Hospital>()
                 .HasMany(x => x.Doctors)

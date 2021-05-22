@@ -15,8 +15,5 @@ namespace historial_blockchain.Models
 
         [Required]
         public int ServiceCatalogId { get; set; }
-    
-        [Required]
-        public string AdminId { get; set; }
     }
 }

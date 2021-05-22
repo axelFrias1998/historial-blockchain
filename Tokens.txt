@@ -4,27 +4,27 @@ Uli - SysAdmin
   "password": "Uli.98"
 }
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InBhcGljaHVsb1VsaXNlcyIsIlVzZXJJZCI6Ijk2ZjkwZTc2LWQyYWMtNDY4Yi04Y2QyLTdjZjJhNzAxOWEwYyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlN5c0FkbWluIiwiZXhwIjoxNjIyNzc0OTExfQ.hMP3RG85YU_aKRaVJZ744EUXk7P3uoQmw3QI_Bzsrfk",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InBhcGljaHVsb1VsaXNlcyIsIlVzZXJJZCI6IjEyY2E3MTYxLTJlODQtNDRmZi04NTg2LTgyZTk3N2ZhOTMzMCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlN5c0FkbWluIiwiZXhwIjoxNjIyOTQyODU0fQ.m5Q-AjJjN2GbcJ8OUDRxCwc1aYsCmz9v3tlHLCIkNGI",
     "expiration": "2021-06-04T02:48:31.1247065Z"
 }
 
 Clinic Admin/Doctor
 Jordi
-{
+{ 
   "Username": "clonazepam",
   "password": "Jordi.98"
 }
-{ 305f31f1-a3b9-4b89-b243-6984f9ec6494
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImNsb25hemVwYW0iLCJVc2VySWQiOiIzMDVmMzFmMS1hM2I5LTRiODktYjI0My02OTg0ZjllYzY0OTQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiRG9jdG9yIiwiQ2xpbmljQWRtaW4iXSwiZXhwIjoxNjIyNzc1MTE3fQ.jth5QsBLHi4yDcMo7q_ZNceIXUmk3-C7i6VyocUrTRM",
+{ 19e177be-c2ac-40c6-8c63-617a61da3659
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImNsb25hemVwYW0iLCJVc2VySWQiOiIxOWUxNzdiZS1jMmFjLTQwYzYtOGM2My02MTdhNjFkYTM2NTkiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiRG9jdG9yIiwiQ2xpbmljQWRtaW4iXSwiZXhwIjoxNjIyOTQzMDAxfQ.pgJNbSLA-WIn5QWyxlwtbiTF2mxc9OrQj3UOlP_HDD8",
     "expiration": "2021-06-04T02:51:57.0789349Z"
 }
 Mariana
-{
+{ 90c54f76-c7b4-4443-add7-d701c8449004
   "Username": "marianaCarmen",
   "password": "Mariana.99"
 }
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im1hcmlhbmFDYXJtZW4iLCJVc2VySWQiOiJlYWI1NGY4OC00YmU0LTQ3YmMtYWVmNS04ZTI3MWQ4MzkyNzUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiRG9jdG9yIiwiQ2xpbmljQWRtaW4iXSwiZXhwIjoxNjIyNzc1Mzc3fQ.u_UzCrUo9SnfoQw8umLThbKTHpCR7mXHb5tUbdeVvxo",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im1hcmlhbmFDYXJtZW4iLCJVc2VySWQiOiI5MGM1NGY3Ni1jN2I0LTQ0NDMtYWRkNy1kNzAxYzg0NDkwMDQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiRG9jdG9yIiwiQ2xpbmljQWRtaW4iXSwiZXhwIjoxNjIyOTQzOTk5fQ.ZdvxQ5sX8vH7dkruyS0Dh1ikMlK466-rnFdqqFB3JfM",
     "expiration": "2021-06-04T02:56:17.8819578Z"
 }
 Pacs
@@ -33,17 +33,34 @@ Mick
   "Username": "mickeldick",
   "password": "Mick.99"
 }
-{
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im1pY2tlbGRpY2siLCJVc2VySWQiOiI5NDg3Y2Y0ZS01NDQxLTQ3OTAtYjJjMy1hMmFmN2IxNTBjYzgiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJQYWNzQWRtaW4iLCJleHAiOjE2MjI3NzU1MTl9.6vy2ncNRxPkNTTagc5w9A5el5vd2nSQ3saXlh87Eebg",
+{ 86c8ebd5-0874-46cc-acda-56c6674ca434
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im1pY2tlbGRpY2siLCJVc2VySWQiOiI4NmM4ZWJkNS0wODc0LTQ2Y2MtYWNkYS01NmM2Njc0Y2E0MzQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJQYWNzQWRtaW4iLCJleHAiOjE2MjI5NDQwNDh9.TP514Fh7U1O8U_FKRQFH6ebxMvYt7Pu287s59Xkwfuw",
     "expiration": "2021-06-04T02:58:39.3346944Z"
 }
 Lucas
-{
+{ 
   "Username": "miperrobellaco",
   "password": "Lucas.99"
 }
-{
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im1pcGVycm9iZWxsYWNvIiwiVXNlcklkIjoiNzljMjUxMWMtMDVmNC00YWVlLTk5NDctMzY4YzgwYTIwMmU0IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUGFjc0FkbWluIiwiZXhwIjoxNjIyNzc1NjcyfQ.wvz4VlaY1H98uTLXzsJx4WlUK5TAkeWIermGv0g8u2c",
+{ b01ef1cc-0d16-4658-9bfb-e70addc69d41
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im1pcGVycm9iZWxsYWNvIiwiVXNlcklkIjoiYjAxZWYxY2MtMGQxNi00NjU4LTliZmItZTcwYWRkYzY5ZDQxIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUGFjc0FkbWluIiwiZXhwIjoxNjIyOTQ0MTU2fQ.rIEGpkxaZuf9ETCtqBcw0vaUkaBeag-QxMowLLv8TGw",
     "expiration": "2021-06-04T03:01:12.547175Z"
 }
 
+
+HOSPITALES
+{
+    "hospitalId": "3f4b8615-ca3b-4aa7-9002-32b43c1c7c0c",
+    "name": "Hospital Ángeles",
+    "phoneNumber": "5687095142",
+}
+{
+    "hospitalId": "24176ded-26c4-4b31-80f4-c0be51f2ab52",
+    "name": "IMSS",
+    "phoneNumber": "5687095142"
+}
+{
+    "hospitalId": "f7b6a8f8-2715-4801-9a0e-24982090a799",
+    "name": "Hospital Médica Sur",
+    "phoneNumber": "5687095142"
+}

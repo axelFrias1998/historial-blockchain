@@ -21,7 +21,7 @@ namespace historial_blockchain.Models
         [Required(ErrorMessage = "Apellido es requerido"), StringLength(100)]
         public string Apellido { get; set; }
 
-        public virtual Hospital HospitalAdmin { get; set; }
+        public virtual ICollection<Hospital> HospitalsAdmins { get; set; }
 
         public virtual ICollection<Hospital> Hospitals { get; set; }
     }

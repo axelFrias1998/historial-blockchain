@@ -32,16 +32,19 @@ namespace historial_blockchain.Controllers
             this.mapper = mapper;
         }
 
+        //TODO join hospitales, hospitalAdministrador y Applicationuser para obtener la información de los administradores del hospital
         [Authorize(Roles = "SysAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<HospitalsDTO>>> GetHospitalsInfo()
         {
-            var hospitalsDto = mapper.Map<List<HospitalsDTO>>(await context.Hospitals.Include(x => x.ServicesCatalog).Include(x => x.Admin).ToListAsync());
+            var hospitalsDto = mapper.Map<List<HospitalsDTO>>(await context.Hospitals.Include(x => x.ServicesCatalog).ToListAsync());
+            //var hospitalsDto = mapper.Map<List<HospitalsDTO>>(await context.Hospitals.Include(x => x.ServicesCatalog).Include(x => x.Admin).ToListAsync());
             if(hospitalsDto is null)
                 return NotFound();
             return hospitalsDto.ToList();
         }
 
+        //TODO join hospitales, hospitalAdministrador y Applicationuser para obtener la información de los administradores del hospital
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet("GetHospitalInfo/{id}", Name = "GetHospitalInfo")]
         public async Task<ActionResult<HospitalsDTO>> GetInfo(string id)
@@ -51,7 +54,8 @@ namespace historial_blockchain.Controllers
             //    where foo.ID == 45
             //    from bar in foo.Bars
             //    select bar;
-            var hospital = mapper.Map<HospitalsDTO>(await context.Hospitals.Include(x => x.Admin).Include(x => x.ServicesCatalog).FirstOrDefaultAsync(x => x.HospitalId.Equals(id)));
+            var hospital = mapper.Map<HospitalsDTO>(await context.Hospitals.Include(x => x.ServicesCatalog).FirstOrDefaultAsync(x => x.HospitalId.Equals(id)));
+            //var hospital = mapper.Map<HospitalsDTO>(await context.Hospitals.Include(x => x.Admin).Include(x => x.ServicesCatalog).FirstOrDefaultAsync(x => x.HospitalId.Equals(id)));
             if(hospital is null)
                 return NotFound();
             return hospital;
@@ -67,7 +71,6 @@ namespace historial_blockchain.Controllers
                 PhoneNumber = hospitalInfo.PhoneNumber,
                 RegisterDate = DateTime.Now,
                 ServiceCatalogId = hospitalInfo.ServiceCatalogId,
-                AdminId = hospitalInfo.AdminId,
                 IsEnable = true
             };
             await context.Hospitals.AddAsync(hospital);
