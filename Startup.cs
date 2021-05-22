@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using historial_blockchain.Contexts;
+using historial_blockchain.Data;
 using historial_blockchain.Entities;
 using historial_blockchain.Helpers;
 using historial_blockchain.Models;
@@ -38,6 +39,7 @@ namespace historial_blockchain
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddCors();
+            services.AddScoped<HospitalAdministradoresRepository>();
             services.AddAutoMapper(Configuration => 
             {
                 Configuration.CreateMap<ApplicationUser, CreatedUserDTO>();
@@ -47,6 +49,7 @@ namespace historial_blockchain
                 Configuration.CreateMap<SpecialitiesCatalog, SpecialitiesDTO>();
                 Configuration.CreateMap<HospitalSpecialitiesDTO, HospitalEspecialidad>().ReverseMap();
                 Configuration.CreateMap<HospitalSpeciality, HospitalEspecialidad>().ReverseMap();
+                Configuration.CreateMap<HospitalAdmin, HospitalAdministrador>().ReverseMap();
             } ,typeof(Startup));
             services.AddScoped<HashService>();
             services.AddDataProtection();

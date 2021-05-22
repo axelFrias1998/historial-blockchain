@@ -22,7 +22,6 @@ namespace historial_blockchain.Contexts
         public DbSet<HospitalAdministrador> HospitalAdministrador { get; set; }
 
 
-
         //public DbSet<Consulta> Consulta { get; set; }
 
         
@@ -134,9 +133,9 @@ namespace historial_blockchain.Contexts
                 .WithMany(x => x.HospitalsAdmins)
                 .UsingEntity<HospitalAdministrador>(
                     x => x.HasOne(x => x.Admin)
-                        .WithMany().HasForeignKey(x => x.AdminId),
+                        .WithMany().HasForeignKey(x => x.AdminId).IsRequired(false),
                     x => x.HasOne(x => x.Hospital)
-                        .WithMany().HasForeignKey(x => x.HospitalId)
+                        .WithMany().HasForeignKey(x => x.HospitalId).IsRequired(false)
                 );
 
             builder.Entity<Hospital>()
@@ -156,7 +155,7 @@ namespace historial_blockchain.Contexts
                     x => x.HasOne(x => x.Especialidad)
                         .WithMany().HasForeignKey(x => x.EspecialidadId),
                     x => x.HasOne(x => x.Hospital)
-                        .WithMany().HasForeignKey(x => x.HospitalId)                   
+                        .WithMany().HasForeignKey(x => x.HospitalId)           
                 );
             
             builder.Entity<Hospital>()
@@ -166,7 +165,7 @@ namespace historial_blockchain.Contexts
                     x => x.HasOne(x => x.Consulta)
                         .WithMany().HasForeignKey(x => x.ConsultaId),
                     x => x.HasOne(x => x.Hospital)
-                        .WithMany().HasForeignKey(x => x.HospitalId)                   
+                        .WithMany().HasForeignKey(x => x.HospitalId)
                 );
             #endregion
             

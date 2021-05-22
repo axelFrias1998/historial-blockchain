@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using historial_blockchain.Models;
 
@@ -5,6 +6,10 @@ namespace historial_blockchain.Entities
 {
     public class HospitalDoctor
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        
         public string DoctorId { get; set; }
 
         public string HospitalId { get; set; }

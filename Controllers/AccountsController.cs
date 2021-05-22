@@ -51,7 +51,6 @@ namespace historial_blockchain.Contexts
             return account;
         }
 
-        //TODO obtener administradores que no estén registrados en un hospital
         [Authorize(Roles = "SysAdmin")]
         [HttpGet("GetAdmins/{type}")]
         public async Task<ActionResult<IEnumerable<CreatedUserDTO>>> GetAdmins(bool type)
@@ -300,5 +299,3 @@ namespace historial_blockchain.Contexts
         }    
     }
 }
-
-//TODO PROBAR CREACIÓN de administradores, ACTUALIZACIÓN de datos propios (sysAdmin), leer administradores por rol y actualizar muchos a muchos administradores/hospitales

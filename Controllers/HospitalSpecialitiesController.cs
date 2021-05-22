@@ -101,5 +101,3 @@ namespace historial_blockchain.Controllers
         }
     }
 }
-
-//TODO probar obtener especialidades del hospital, obtener especialidad del hospital, agregar especialidad y borrar especialidad

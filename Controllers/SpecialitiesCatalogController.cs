@@ -89,6 +89,5 @@ namespace historial_blockchain.Contexts
             return mapper.Map<SpecialitiesDTO>(speciality);
         }
 
-        //TODO probar edición y agregado de especialidades
     }
 }

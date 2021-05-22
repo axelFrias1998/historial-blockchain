@@ -32,7 +32,6 @@ namespace historial_blockchain.Controllers
             this.mapper = mapper;
         }
 
-        //TODO join hospitales, hospitalAdministrador y Applicationuser para obtener la información de los administradores del hospital
         [Authorize(Roles = "SysAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<HospitalsDTO>>> GetHospitalsInfo()
@@ -44,7 +43,6 @@ namespace historial_blockchain.Controllers
             return hospitalsDto.ToList();
         }
 
-        //TODO join hospitales, hospitalAdministrador y Applicationuser para obtener la información de los administradores del hospital
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet("GetHospitalInfo/{id}", Name = "GetHospitalInfo")]
         public async Task<ActionResult<HospitalsDTO>> GetInfo(string id)
