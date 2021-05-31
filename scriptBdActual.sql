@@ -1,5 +1,3 @@
-Build started...
-Build succeeded.
 IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [__EFMigrationsHistory] (
