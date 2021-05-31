@@ -15,7 +15,7 @@ namespace historial_blockchain.Entities
         }
         
         [Key]
-        public string Id { get; set; }
+        public string ConsultaId { get; set; }
 
         [Required]
         public DateTime DateStamp { get; set; }

@@ -48,36 +48,36 @@ namespace historial_blockchain.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "46a5ef55-16bb-49e4-8405-f81d50162428",
-                            ConcurrencyStamp = "e6f19e20-2188-4f0f-912a-806100595c67",
+                            Id = "99a76f72-a219-4891-80f5-d6c84d33c696",
+                            ConcurrencyStamp = "e7b5253d-07d4-4f95-a62e-3dee21a8aecd",
                             Name = "SysAdmin",
                             NormalizedName = "SysAdmin"
                         },
                         new
                         {
-                            Id = "b305c2c6-38fa-441e-b87c-b9ab3c264017",
-                            ConcurrencyStamp = "be9ee729-f450-4fc4-805b-87263812c945",
+                            Id = "d2f6a949-dc3f-453d-aa1f-79b5de5b0b74",
+                            ConcurrencyStamp = "9e024bbe-aa75-4549-85cd-f7b396908151",
                             Name = "PacsAdmin",
                             NormalizedName = "PacsAdmin"
                         },
                         new
                         {
-                            Id = "e251fd3c-b2b2-4840-b889-07ba9220d999",
-                            ConcurrencyStamp = "65da9d5f-cbd4-40b1-ab20-8c7cc3467e37",
+                            Id = "c4a2a296-ff57-4522-88ac-73d2238b1d28",
+                            ConcurrencyStamp = "1c8675b1-8868-4f2a-90ad-964799b6ad94",
                             Name = "ClinicAdmin",
                             NormalizedName = "ClinicAdmin"
                         },
                         new
                         {
-                            Id = "d249d1c4-9dc7-40c3-8bf2-f5273d8d4d55",
-                            ConcurrencyStamp = "a29ab80c-bcd2-41ab-881d-63edba869127",
+                            Id = "259cbe94-6fbd-417d-9732-a71c29b6219c",
+                            ConcurrencyStamp = "26a56d56-2c1a-4429-bcb4-21e53c87b86a",
                             Name = "Pacient",
                             NormalizedName = "Pacient"
                         },
                         new
                         {
-                            Id = "0fc35bb9-a849-4d59-a628-c377f2f1e3bd",
-                            ConcurrencyStamp = "2d67fe53-9e07-4106-b8e1-9177bd216aeb",
+                            Id = "3ac9e38b-f26e-4ff1-b110-76cd0891c5b5",
+                            ConcurrencyStamp = "233b6a5d-8afe-413e-a6e5-a13a25a57523",
                             Name = "Doctor",
                             NormalizedName = "Doctor"
                         });
@@ -187,9 +187,66 @@ namespace historial_blockchain.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("historial_blockchain.Entities.CatalogoGrupoMedicamentos", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CatalogoGrupoMedicamentos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Type = "Analgesia"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Type = "Anestesia"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Type = "Cardiología"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Type = "Dermatología"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Type = "Endocrinología y metabolismo"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Type = "Enfermedades Infecciosas y Parasitarias"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Type = "Enfermedades Inmunoalérgicas"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Type = "Gastroenterología"
+                        });
+                });
+
             modelBuilder.Entity("historial_blockchain.Entities.Consulta", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("ConsultaId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateStamp")
@@ -201,7 +258,7 @@ namespace historial_blockchain.Migrations
                     b.Property<string>("PacienteId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ConsultaId");
 
                     b.HasIndex("DoctorId");
 
@@ -287,7 +344,7 @@ namespace historial_blockchain.Migrations
 
             modelBuilder.Entity("historial_blockchain.Entities.HospitalDoctor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("HospitalDoctorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -301,7 +358,7 @@ namespace historial_blockchain.Migrations
                     b.Property<string>("HospitalId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("HospitalDoctorId");
 
                     b.HasIndex("DoctorId");
 
@@ -332,6 +389,37 @@ namespace historial_blockchain.Migrations
                     b.HasIndex("HospitalId");
 
                     b.ToTable("HospitalEspecialidades");
+                });
+
+            modelBuilder.Entity("historial_blockchain.Entities.HospitalMedicamentos", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GrupoMedicamentosId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HospitalId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Indicaciones")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ViaAdministracion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GrupoMedicamentosId");
+
+                    b.HasIndex("HospitalId");
+
+                    b.ToTable("HospitalMedicamentos");
                 });
 
             modelBuilder.Entity("historial_blockchain.Entities.ServicesCatalog", b =>
@@ -639,6 +727,23 @@ namespace historial_blockchain.Migrations
                         .HasForeignKey("HospitalId");
 
                     b.Navigation("Especialidad");
+
+                    b.Navigation("Hospital");
+                });
+
+            modelBuilder.Entity("historial_blockchain.Entities.HospitalMedicamentos", b =>
+                {
+                    b.HasOne("historial_blockchain.Entities.CatalogoGrupoMedicamentos", "CatalogoGrupoMedicamentos")
+                        .WithMany()
+                        .HasForeignKey("GrupoMedicamentosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("historial_blockchain.Entities.Hospital", "Hospital")
+                        .WithMany()
+                        .HasForeignKey("HospitalId");
+
+                    b.Navigation("CatalogoGrupoMedicamentos");
 
                     b.Navigation("Hospital");
                 });

@@ -20,26 +20,6 @@ namespace historial_blockchain.Controllers
             this.mapper = mapper;
             this.context = context;
         }
-
-        /*[Authorize(Roles = "PacsAdmin,ClinicAdmin")]
-        [HttpGet("{hospitalId}")]
-        public ActionResult<IEnumerable<HospitalDoctorsDTO>> GetHospitalSpecialities(string hospitalId)
-        {
-            var hospitalSpecialities = context.HospitalEspecialidades.Where(x=> x.HospitalId.Equals(hospitalId))
-                .Join(
-                    context.SpecialitiesCatalog,
-                    x => x.EspecialidadId,
-                    y => y.Id,
-                    (x, y) => new HospitalSpecialitiesDTO
-                    {
-                        EspecialidadId = x.EspecialidadId,
-                        Nombre = y.Type
-                    }
-                ).ToList();
-            if(hospitalSpecialities is null)
-                return NotFound();
-            return hospitalSpecialities;
-        }*/
         //TODO agregar doctores, leerlos, eliminarlos y obtener por id
     }
 }

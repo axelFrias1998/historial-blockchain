@@ -17,6 +17,9 @@ using historial_blockchain.Entities;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using historial_blockchain.Enums;
+using Microsoft.AspNetCore.DataProtection;
+using historial_blockchain.Services;
+using System.Security.Cryptography;
 
 namespace historial_blockchain.Contexts
 {
@@ -26,18 +29,20 @@ namespace historial_blockchain.Contexts
     public class AccountsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly HashService hashService;
         private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, ApplicationDbContext context, IMapper mapper)
+        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, ApplicationDbContext context, IMapper mapper, HashService hashService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             this.context = context;
             this.mapper = mapper;
+            this.hashService = hashService;
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
@@ -93,8 +98,8 @@ namespace historial_blockchain.Contexts
         }
 
         [AllowAnonymous]
-        [HttpPost("CreatePacientAccount")]
-        public async Task<ActionResult<UserToken>> CreatePacientAccount([FromBody] UserInfo userInfo)
+        [HttpPost("CreatePacient")]
+        public async Task<ActionResult<UserToken>> CreatePacient([FromBody] UserInfo userInfo)
         {
             var user = new ApplicationUser {
                 Apellido = userInfo.Apellido,
@@ -104,20 +109,17 @@ namespace historial_blockchain.Contexts
                 UserName = userInfo.UserName, 
             };
             var result = await _userManager.CreateAsync(user, userInfo.Password);
+
             if(result.Succeeded)
             {
                 var userData = await _userManager.FindByEmailAsync(userInfo.Email);
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Pacient"));
                 await _userManager.AddToRoleAsync(userData, "Pacient");
                 
-                var roles = await _userManager.GetRolesAsync(userData);
-                return BuildToken(
-                    new UserLogin {
-                        Username = userInfo.UserName,
-                        Password = userInfo.Password
-                    }, 
-                    roles,
-                    userData.Id);
+                //El protector del archivo es el usuario y la contraseña
+                string genNodeId = EncryptText($"123_{userData.Id}_456", $"prot_{userInfo.UserName}.{userInfo.Password}_ector");
+                return File(Encoding.UTF8.GetBytes(genNodeId), "text/plain", $"{userData.Nombre}_genNode.gti");
+                //PROBLEMA: NO PUEDO CREAR UN NODO EXTENSIÓN GNI
             }
             return BadRequest("Datos incorrectos");
         }
@@ -233,7 +235,6 @@ namespace historial_blockchain.Contexts
             return NoContent();
         }
 
-        //TODO Agregar el enumerable a los
         private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId, UserType userType)
         {
             var claims = new List<Claim>
@@ -245,12 +246,9 @@ namespace historial_blockchain.Contexts
             foreach (var role in roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
 
-            
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            //TODO Reducir el tiempo del token. Está así por pruebas
             var expiration = DateTime.UtcNow.AddDays(15);
 
             JwtSecurityToken token = new JwtSecurityToken(
@@ -296,6 +294,24 @@ namespace historial_blockchain.Contexts
                 Expiration = expiration,
                 Token = new JwtSecurityTokenHandler().WriteToken(token)
             };
-        }    
+        }
+
+        private string EncryptText(string encryptval, string key)  
+        {  
+            byte[] SrctArray;  
+            byte[] EnctArray = UTF8Encoding.UTF8.GetBytes(encryptval);  
+            SrctArray = UTF8Encoding.UTF8.GetBytes(key);  
+            TripleDESCryptoServiceProvider objt = new TripleDESCryptoServiceProvider();  
+            MD5CryptoServiceProvider objcrpt = new MD5CryptoServiceProvider();  
+            SrctArray = objcrpt.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));  
+            objcrpt.Clear();  
+            objt.Key = SrctArray;  
+            objt.Mode = CipherMode.ECB;  
+            objt.Padding = PaddingMode.PKCS7;  
+            ICryptoTransform crptotrns = objt.CreateEncryptor();  
+            byte[] resArray = crptotrns.TransformFinalBlock(EnctArray, 0, EnctArray.Length);  
+            objt.Clear();  
+            return Convert.ToBase64String(resArray, 0, resArray.Length);  
+        }      
     }
 }

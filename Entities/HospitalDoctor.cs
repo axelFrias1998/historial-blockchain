@@ -8,7 +8,7 @@ namespace historial_blockchain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int HospitalDoctorId { get; set; }
         
         public string DoctorId { get; set; }
 

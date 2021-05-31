@@ -52,7 +52,7 @@ namespace historial_blockchain.Controllers
         [HttpGet("HospitalSpeciality/{hospitalId}/{specialityId}", Name = "HospitalSpeciality")]
         public async Task<ActionResult<HospitalSpecialitiesDTO>> GetHospitalSpecialitysAsync(string hospitalId, int specialityId)
         {
-            var hospitalSpeciality = await context.HospitalEspecialidades.Where(x=> x.HospitalId.Equals(hospitalId))
+            var hospitalSpeciality = await context.HospitalEspecialidades.Where(x=> x.HospitalId.Equals(hospitalId)).Where(x => x.EspecialidadId == specialityId)
                 .Join(
                     context.SpecialitiesCatalog,
                     x => x.EspecialidadId,
@@ -68,8 +68,6 @@ namespace historial_blockchain.Controllers
             return hospitalSpeciality;
         }
 
-
-
         [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
         [HttpPost]
         public async Task<ActionResult<HospitalSpecialitiesDTO>> AddHospitalSpeciality([FromBody] HospitalSpeciality hospitalSpeciality)
@@ -81,7 +79,7 @@ namespace historial_blockchain.Controllers
             var hospitalEspecialidad = mapper.Map<HospitalEspecialidad>(newHospitalSpeciality);
             await context.HospitalEspecialidades.AddAsync(hospitalEspecialidad);
             await context.SaveChangesAsync();
-            return new CreatedAtRouteResult($"HospitalSpeciality", new { hospitalId = hospitalEspecialidad.HospitalId, specialityId = hospitalEspecialidad.EspecialidadId}, hospitalEspecialidad);
+            return new CreatedAtRouteResult("HospitalSpeciality", new { hospitalId = hospitalEspecialidad.HospitalId, specialityId = hospitalEspecialidad.EspecialidadId}, hospitalEspecialidad);
         }
 
         [Authorize(Roles = "PacsAdmin,ClinicAdmin")]

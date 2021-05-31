@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace historial_blockchain.Migrations
 {
-    public partial class modeloBaseDeDatos : Migration
+    public partial class hospitalMedicamentos : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,6 +46,19 @@ namespace historial_blockchain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CatalogoGrupoMedicamentos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CatalogoGrupoMedicamentos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -185,14 +198,14 @@ namespace historial_blockchain.Migrations
                 name: "Consultas",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ConsultaId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DateStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PacienteId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     DoctorId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Consultas", x => x.Id);
+                    table.PrimaryKey("PK_Consultas", x => x.ConsultaId);
                     table.ForeignKey(
                         name: "FK_Consultas_AspNetUsers_DoctorId",
                         column: x => x.DoctorId,
@@ -216,16 +229,11 @@ namespace historial_blockchain.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ServiceCatalogId = table.Column<int>(type: "int", nullable: false),
-                    AdminId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    IsEnable = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Hospitals", x => x.HospitalId);
-                    table.ForeignKey(
-                        name: "FK_Hospitals_AspNetUsers_AdminId",
-                        column: x => x.AdminId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Hospitals_ServicesCatalog_ServiceCatalogId",
                         column: x => x.ServiceCatalogId,
@@ -235,52 +243,82 @@ namespace historial_blockchain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HospitalConsulta",
+                name: "HospitalAdministrador",
                 columns: table => new
                 {
-                    ConsultaId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AdminId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HospitalConsulta", x => new { x.ConsultaId, x.HospitalId });
+                    table.PrimaryKey("PK_HospitalAdministrador", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HospitalAdministrador_AspNetUsers_AdminId",
+                        column: x => x.AdminId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_HospitalAdministrador_Hospitals_HospitalId",
+                        column: x => x.HospitalId,
+                        principalTable: "Hospitals",
+                        principalColumn: "HospitalId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HospitalConsulta",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ConsultaId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HospitalConsulta", x => x.Id);
                     table.ForeignKey(
                         name: "FK_HospitalConsulta_Consultas_ConsultaId",
                         column: x => x.ConsultaId,
                         principalTable: "Consultas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ConsultaId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_HospitalConsulta_Hospitals_HospitalId",
                         column: x => x.HospitalId,
                         principalTable: "Hospitals",
                         principalColumn: "HospitalId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "HospitalDoctor",
                 columns: table => new
                 {
-                    DoctorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    HospitalDoctorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DoctorId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     EspecialidadId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HospitalDoctor", x => new { x.DoctorId, x.HospitalId });
+                    table.PrimaryKey("PK_HospitalDoctor", x => x.HospitalDoctorId);
                     table.ForeignKey(
                         name: "FK_HospitalDoctor_AspNetUsers_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_HospitalDoctor_Hospitals_HospitalId",
                         column: x => x.HospitalId,
                         principalTable: "Hospitals",
                         principalColumn: "HospitalId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_HospitalDoctor_SpecialitiesCatalog_EspecialidadId",
                         column: x => x.EspecialidadId,
@@ -290,27 +328,58 @@ namespace historial_blockchain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HospitalEspecialidad",
+                name: "HospitalEspecialidades",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     EspecialidadId = table.Column<int>(type: "int", nullable: false),
-                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HospitalEspecialidad", x => new { x.EspecialidadId, x.HospitalId });
+                    table.PrimaryKey("PK_HospitalEspecialidades", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HospitalEspecialidad_Hospitals_HospitalId",
+                        name: "FK_HospitalEspecialidades_Hospitals_HospitalId",
                         column: x => x.HospitalId,
                         principalTable: "Hospitals",
                         principalColumn: "HospitalId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_HospitalEspecialidad_SpecialitiesCatalog_EspecialidadId",
+                        name: "FK_HospitalEspecialidades_SpecialitiesCatalog_EspecialidadId",
                         column: x => x.EspecialidadId,
                         principalTable: "SpecialitiesCatalog",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HospitalMedicamentos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Indicaciones = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ViaAdministracion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GrupoMedicamentosId = table.Column<int>(type: "int", nullable: false),
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HospitalMedicamentos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HospitalMedicamentos_CatalogoGrupoMedicamentos_GrupoMedicamentosId",
+                        column: x => x.GrupoMedicamentosId,
+                        principalTable: "CatalogoGrupoMedicamentos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HospitalMedicamentos_Hospitals_HospitalId",
+                        column: x => x.HospitalId,
+                        principalTable: "Hospitals",
+                        principalColumn: "HospitalId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -318,11 +387,26 @@ namespace historial_blockchain.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "5043dbba-9e37-4057-8130-310f5b570d34", "33cf1275-9670-45d8-897e-c33be9485931", "SysAdmin", "SysAdmin" },
-                    { "78902708-5c20-4fba-9c7f-cf0bed718df6", "1402de2a-a192-4bb4-a7a5-b993ed97ec6a", "PacsAdmin", "PacsAdmin" },
-                    { "d1c569cc-5a38-4c4f-9071-d86300bf3832", "fac9a681-52b9-478c-be42-c7892e2b5017", "ClinicAdmin", "ClinicAdmin" },
-                    { "2fa74b16-1af5-455b-bf88-09ce04585c45", "59a81139-ebc7-4eda-ba5a-8611f8fe7221", "Pacient", "Pacient" },
-                    { "0ecd109b-cd9f-40d5-b218-5c623cbe6bc2", "a7d03417-4b4a-49f7-98c3-c9754ee9eb80", "Doctor", "Doctor" }
+                    { "99a76f72-a219-4891-80f5-d6c84d33c696", "e7b5253d-07d4-4f95-a62e-3dee21a8aecd", "SysAdmin", "SysAdmin" },
+                    { "d2f6a949-dc3f-453d-aa1f-79b5de5b0b74", "9e024bbe-aa75-4549-85cd-f7b396908151", "PacsAdmin", "PacsAdmin" },
+                    { "c4a2a296-ff57-4522-88ac-73d2238b1d28", "1c8675b1-8868-4f2a-90ad-964799b6ad94", "ClinicAdmin", "ClinicAdmin" },
+                    { "259cbe94-6fbd-417d-9732-a71c29b6219c", "26a56d56-2c1a-4429-bcb4-21e53c87b86a", "Pacient", "Pacient" },
+                    { "3ac9e38b-f26e-4ff1-b110-76cd0891c5b5", "233b6a5d-8afe-413e-a6e5-a13a25a57523", "Doctor", "Doctor" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "CatalogoGrupoMedicamentos",
+                columns: new[] { "Id", "Type" },
+                values: new object[,]
+                {
+                    { 8, "Gastroenterología" },
+                    { 7, "Enfermedades Inmunoalérgicas" },
+                    { 5, "Endocrinología y metabolismo" },
+                    { 6, "Enfermedades Infecciosas y Parasitarias" },
+                    { 3, "Cardiología" },
+                    { 2, "Anestesia" },
+                    { 1, "Analgesia" },
+                    { 4, "Dermatología" }
                 });
 
             migrationBuilder.InsertData(
@@ -341,12 +425,11 @@ namespace historial_blockchain.Migrations
                 columns: new[] { "Id", "Type" },
                 values: new object[,]
                 {
+                    { 4, "Odontología" },
                     { 1, "Pediatría" },
                     { 2, "Ginecología" },
                     { 3, "Geriatría" },
-                    { 4, "Odontología" },
-                    { 5, "General" },
-                    { 6, "Prueba" }
+                    { 5, "General" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -399,9 +482,29 @@ namespace historial_blockchain.Migrations
                 column: "PacienteId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_HospitalAdministrador_AdminId",
+                table: "HospitalAdministrador",
+                column: "AdminId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HospitalAdministrador_HospitalId",
+                table: "HospitalAdministrador",
+                column: "HospitalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HospitalConsulta_ConsultaId",
+                table: "HospitalConsulta",
+                column: "ConsultaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_HospitalConsulta_HospitalId",
                 table: "HospitalConsulta",
                 column: "HospitalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HospitalDoctor_DoctorId",
+                table: "HospitalDoctor",
+                column: "DoctorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HospitalDoctor_EspecialidadId",
@@ -414,15 +517,24 @@ namespace historial_blockchain.Migrations
                 column: "HospitalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HospitalEspecialidad_HospitalId",
-                table: "HospitalEspecialidad",
+                name: "IX_HospitalEspecialidades_EspecialidadId",
+                table: "HospitalEspecialidades",
+                column: "EspecialidadId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HospitalEspecialidades_HospitalId",
+                table: "HospitalEspecialidades",
                 column: "HospitalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Hospitals_AdminId",
-                table: "Hospitals",
-                column: "AdminId",
-                unique: true);
+                name: "IX_HospitalMedicamentos_GrupoMedicamentosId",
+                table: "HospitalMedicamentos",
+                column: "GrupoMedicamentosId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HospitalMedicamentos_HospitalId",
+                table: "HospitalMedicamentos",
+                column: "HospitalId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Hospitals_ServiceCatalogId",
@@ -448,13 +560,19 @@ namespace historial_blockchain.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "HospitalAdministrador");
+
+            migrationBuilder.DropTable(
                 name: "HospitalConsulta");
 
             migrationBuilder.DropTable(
                 name: "HospitalDoctor");
 
             migrationBuilder.DropTable(
-                name: "HospitalEspecialidad");
+                name: "HospitalEspecialidades");
+
+            migrationBuilder.DropTable(
+                name: "HospitalMedicamentos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -463,10 +581,13 @@ namespace historial_blockchain.Migrations
                 name: "Consultas");
 
             migrationBuilder.DropTable(
-                name: "Hospitals");
+                name: "SpecialitiesCatalog");
 
             migrationBuilder.DropTable(
-                name: "SpecialitiesCatalog");
+                name: "CatalogoGrupoMedicamentos");
+
+            migrationBuilder.DropTable(
+                name: "Hospitals");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

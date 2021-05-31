@@ -21,20 +21,20 @@ namespace historial_blockchain.Contexts
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class SpecialitiesCatalogController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext contex;
         private readonly IMapper mapper;
 
         public SpecialitiesCatalogController(ApplicationDbContext context, IMapper mapper)
         {
             this.mapper = mapper;
-            _context = context;
+            this.contex = context;
         }
 
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SpecialitiesDTO>>>  GetSpecialities()
         {
-            var specialitiescatalog = await _context.SpecialitiesCatalog.ToListAsync();
+            var specialitiescatalog = await contex.SpecialitiesCatalog.ToListAsync();
             if(specialitiescatalog is null)
                 return NotFound();
             var specialitiesDTO = mapper.Map<List<SpecialitiesDTO>>(specialitiescatalog);
@@ -45,22 +45,19 @@ namespace historial_blockchain.Contexts
         [HttpGet("{id}", Name = "SpecialityInfo")]
         public async Task<ActionResult<SpecialitiesDTO>> GetSpecialityInfo(int id)
         {
-            var specialitiescatalog = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id == id);
+            var specialitiescatalog = await contex.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id == id);
             if(specialitiescatalog is null)
                 return NotFound();
-            var specialityDTO = mapper.Map<SpecialitiesDTO>(specialitiescatalog);
-            if(specialityDTO is null)
-                return NotFound();
-            return specialityDTO;
+            return mapper.Map<SpecialitiesDTO>(specialitiescatalog);
         }
 
         [Authorize(Roles = "SysAdmin")]
         [HttpPost]
         public async Task<ActionResult> CreateSpeciality([FromBody] SpecialityName specialityName)
         {
-            await _context.SpecialitiesCatalog.AddAsync(new SpecialitiesCatalog { Type = specialityName.Name });
-            await _context.SaveChangesAsync();
-            var speciality = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Type.Equals(specialityName.Name));
+            await contex.SpecialitiesCatalog.AddAsync(new SpecialitiesCatalog { Type = specialityName.Name });
+            await contex.SaveChangesAsync();
+            var speciality = await contex.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Type.Equals(specialityName.Name));
             return new CreatedAtRouteResult("SpecialityInfo", new { id = speciality.Id}, specialityName);
         }
 
@@ -68,12 +65,12 @@ namespace historial_blockchain.Contexts
         [HttpPut("{id}/{newName}")]
         public async Task<ActionResult> Put(int id, string newName)
         {
-            var speciality = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id == (id));
+            var speciality = await contex.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id == id);
             if(speciality is null)
                 return NotFound();
             speciality.Type = newName;
-            _context.Entry(speciality).State = EntityState.Modified;
-            _context.SaveChanges();
+            contex.Entry(speciality).State = EntityState.Modified;
+            await contex.SaveChangesAsync();
             return NoContent();
         }
 
@@ -81,11 +78,11 @@ namespace historial_blockchain.Contexts
         [HttpDelete("{id}")]
         public async Task<ActionResult<SpecialitiesDTO>> Delete(int id)
         {
-            var speciality = await _context.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id == (id));
+            var speciality = await contex.SpecialitiesCatalog.FirstOrDefaultAsync(x => x.Id == id);
             if(speciality is null)
                 return NotFound();
-            _context.SpecialitiesCatalog.Remove(speciality);
-            await _context.SaveChangesAsync();
+            contex.SpecialitiesCatalog.Remove(speciality);
+            await contex.SaveChangesAsync();
             return mapper.Map<SpecialitiesDTO>(speciality);
         }
 
