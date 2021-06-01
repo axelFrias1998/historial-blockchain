@@ -31,6 +31,7 @@ namespace historial_blockchain.Contexts
         }
 
         [AllowAnonymous]
+        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SpecialitiesDTO>>>  GetSpecialities()
         {
@@ -61,7 +62,7 @@ namespace historial_blockchain.Contexts
             return new CreatedAtRouteResult("SpecialityInfo", new { id = speciality.Id}, specialityName);
         }
 
-        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         [HttpPut("{id}/{newName}")]
         public async Task<ActionResult> Put(int id, string newName)
         {

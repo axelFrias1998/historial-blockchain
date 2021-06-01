@@ -1,0 +1,106 @@
+SysAdmin
+{
+    "apellido" : "Frías Hernández",
+    "email" : "axel.frias257@gmail.com",
+    "password" : "Suri.123",
+    "confirmpassword" : "Suri.123",
+    "nombre" : "Axel",
+    "phonenumber" : "5543517482",
+    "username" : "suripapi"
+}
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1cmlwYXBpIiwiVXNlcklkIjoiZTNjZDZiYWUtZjE5Ny00YWIyLWE1ZTQtNDI2ODk4ZjIxZjNkIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiU3lzQWRtaW4iLCJleHAiOjE2MjM4MTkxNTZ9.cWOT-mg_GVUHM7-qJt2U6ZYpaUXV39LrbBEEZIVblXU",
+  "expiration": "2021-06-16T04:52:36.021916Z"
+}
+
+Pacient
+{
+    "apellido" : "Hernández Julian",
+    "email" : "lizju@gmail.com",
+    "password" : "LizJu.123",
+    "confirmpassword" : "LizJu.123",
+    "nombre" : "Lizeth",
+    "username" : "lamami",
+    "phonenumber" : "5543517482"
+}
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImxhbWFtaSIsIlVzZXJJZCI6ImMxZjE2NjI0LTNjYjgtNDhiYi05ZjhiLTk0MzI0NDY5MGQxNyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlBhY2llbnQiLCJleHAiOjE2MjM4MTkzNTF9.45Jw5Yd765nSRAw8JsulPWxLgB3rblEzcS52yrRxfLQ",
+  "expiration": "2021-06-16T04:55:51.1061098Z"
+}
+
+Clinic Admin
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImxhZm9yYW5lYSIsIlVzZXJJZCI6ImQwMjA2NDkwLTlmMTAtNDNjNS05MTg2LWYyNjVhYWNkNDBhMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJEb2N0b3IiLCJDbGluaWNBZG1pbiJdLCJleHAiOjE2MjM4MTkyMTZ9.hQAc9BWVPCrxDoOaPPfj5BeVAcMUzV5q7QLjhveMxvU",
+  "expiration": "2021-06-16T04:53:36.0699325Z"
+}
+{
+  "id": "d0206490-9f10-43c5-9186-f265aacd40a1",
+  "nombre": "Hidai",
+  "apellido": "Hernández Hernández",
+  "userName": "laforanea",
+  "email": "hidai@gmail.com",
+  "phoneNumber": "5543517482"
+}
+{
+    "apellido" : "Hernández Hernández",
+    "email" : "hidai@gmail.com",
+    "password" : "Hidai.123",
+    "confirmpassword" : "Hidai.123",
+    "nombre" : "Hidai",
+    "phonenumber" : "5543517482",
+    "username" : "laforanea"
+}
+
+Pacs Admin
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImVsZGllZ3VpdG9taXgiLCJVc2VySWQiOiJkYzJkNzE1YS1mOTQ1LTQ1MWMtOTE5Yi1jMzIxYzY5NTQwZWUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJQYWNzQWRtaW4iLCJleHAiOjE2MjM4MTkzMDh9.J2nqVNrHBq2a63Uv2CEksGKPa9aUtWyY_Y4G9w_EpcI",
+  "expiration": "2021-06-16T04:55:08.1508099Z"
+}
+{
+  "id": "dc2d715a-f945-451c-919b-c321c69540ee",
+  "nombre": "Diego",
+  "apellido": "Ramirez Cazares",
+  "userName": "eldieguitomix",
+  "email": "dieguito@gmail.com",
+  "phoneNumber": "5543517482"
+}
+{
+    "apellido" : "Ramirez Cazares",
+    "email" : "dieguito@gmail.com",
+    "password" : "Diego.123",
+    "confirmpassword" : "Diego.123",
+    "nombre" : "Diego",
+    "phonenumber" : "5543517482",
+    "username" : "eldieguitomix"
+}
+
+Clínica privada
+{
+  "hospitalId": "3c5fe820-1646-4c55-bf0c-74f366a5fbc0",
+  "name": "Clínica San Rafael",
+  "phoneNumber": "5587948632"
+}
+
+Hospital privado
+{
+  "hospitalId": "3bd8f544-fc4f-457f-91e7-584f4f61dfad",
+  "name": "Hospital Ángeles",
+  "phoneNumber": "5541748252"
+}
+
+CONTROLADORES PROBADOS Y FUNCIONALES
+
+SpecialitiesCatalogController
+CatalogOfServices
+Users
+
+FALTAN
+
+Accounts
+Blockchain
+CatalogoGrupoMEdicamentos
+HospitalAdministrador
+HospitalDoctors
+HospitalMedicamentos
+Hospitals
+HospitalSpecialities

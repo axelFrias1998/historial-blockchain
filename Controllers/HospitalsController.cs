@@ -18,7 +18,7 @@ namespace historial_blockchain.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class HospitalsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -32,28 +32,38 @@ namespace historial_blockchain.Controllers
             this.mapper = mapper;
         }
 
+        //TODO PROBAR JOIN DE BÚSQUEDA DE ADMINISTRADORES
         [Authorize(Roles = "SysAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<HospitalsDTO>>> GetHospitalsInfo()
         {
-            var hospitalsDto = mapper.Map<List<HospitalsDTO>>(await context.Hospitals.Include(x => x.ServicesCatalog).ToListAsync());
-            //var hospitalsDto = mapper.Map<List<HospitalsDTO>>(await context.Hospitals.Include(x => x.ServicesCatalog).Include(x => x.Admin).ToListAsync());
-            if(hospitalsDto is null)
+            var hospitalsDTO = mapper.Map<List<HospitalsDTO>>(await context.Hospitals.Include(x => x.ServicesCatalog).ToListAsync());
+            foreach (var hospital in hospitalsDTO)
+            {
+                var admins = from HA in context.HospitalAdministrador
+                             join U in context.Users on HA.AdminId equals U.Id
+                             where HA.HospitalId == hospital.HospitalId
+                             select new CreatedUserDTO{
+                                 Id = U.Id,
+                                 Nombre = U.Nombre,
+                                 Apellido = U.Apellido,
+                                 UserName = U.UserName,
+                                 Email = U.Email,
+                                 PhoneNumber = U.PhoneNumber
+                             };
+                foreach (var admin in admins)
+                    hospital.Admins.Append(admin);
+            }
+            if(hospitalsDTO is null)
                 return NotFound();
-            return hospitalsDto.ToList();
+            return hospitalsDTO.ToList();
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet("GetHospitalInfo/{id}", Name = "GetHospitalInfo")]
         public async Task<ActionResult<HospitalsDTO>> GetInfo(string id)
         {
-            //var query =
-            //    from foo in db.Foos
-            //    where foo.ID == 45
-            //    from bar in foo.Bars
-            //    select bar;
             var hospital = mapper.Map<HospitalsDTO>(await context.Hospitals.Include(x => x.ServicesCatalog).FirstOrDefaultAsync(x => x.HospitalId.Equals(id)));
-            //var hospital = mapper.Map<HospitalsDTO>(await context.Hospitals.Include(x => x.Admin).Include(x => x.ServicesCatalog).FirstOrDefaultAsync(x => x.HospitalId.Equals(id)));
             if(hospital is null)
                 return NotFound();
             return hospital;

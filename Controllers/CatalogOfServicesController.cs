@@ -26,7 +26,7 @@ namespace historial_blockchain.Controllers
             this.mapper = mapper;
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "SysAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ServicesCatalog>>> GetCatalogOfServices()
         {

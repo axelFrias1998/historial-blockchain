@@ -116,10 +116,9 @@ namespace historial_blockchain.Contexts
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Pacient"));
                 await _userManager.AddToRoleAsync(userData, "Pacient");
                 
-                //El protector del archivo es el usuario y la contraseña
                 string genNodeId = EncryptText($"123_{userData.Id}_456", $"prot_{userInfo.UserName}.{userInfo.Password}_ector");
+                //TODO Aquí hay que crear el nodo en Mongo
                 return File(Encoding.UTF8.GetBytes(genNodeId), "text/plain", $"{userData.Nombre}_genNode.gti");
-                //PROBLEMA: NO PUEDO CREAR UN NODO EXTENSIÓN GNI
             }
             return BadRequest("Datos incorrectos");
         }
