@@ -49,7 +49,7 @@ namespace historial_blockchain.Contexts
             return BadRequest("Datos incorrectos");
         }
 
-        public string DecryptFile(string decryptText, string key)  
+        private string DecryptFile(string decryptText, string key)  
         {  
             byte[] SrctArray;  
             byte[] DrctArray = Convert.FromBase64String(decryptText);  
