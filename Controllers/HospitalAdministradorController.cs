@@ -17,7 +17,7 @@ namespace historial_blockchain.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin")]
     public class HospitalAdministradorController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -31,39 +31,34 @@ namespace historial_blockchain.Controllers
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        [Authorize(Roles = "SysAdmin")]
-        [AllowAnonymous]
         [HttpGet("AvailableAdmins/{type}")]
-        public async Task<ActionResult<IEnumerable<HospitalAdminDTO>>> GetAvailableAdmins(int type)
+        public async Task<ActionResult<IEnumerable<HospitalAdminDTO>>> GetAvailableAdmins(bool type)
         {
-            return await repository.GetAvailableAdmins((type == 1) ? "PacsAdmin" : "ClinicAdmin");
+            return await repository.GetAvailableAdmins((type) ? "PacsAdmin" : "ClinicAdmin");
         }
 
-        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
-        [AllowAnonymous]
+        
         [HttpGet("{hospitalId}")]
-        public ActionResult<IEnumerable<HospitalAdminDTO>> GetAdmins(string hospitalId)
+        public async Task<ActionResult<IEnumerable<HospitalAdminDTO>>> GetHospitalAdmins(string hospitalId)
         {
-            var hospitalAdmins = context.HospitalAdministrador.Where(x => x.HospitalId.Equals(hospitalId))
+            var info = new HospitalAdminCreatedDTO();
+            var hospitalAdmins = await context.HospitalAdministrador.Where(x => x.HospitalId.Equals(hospitalId))
                 .Join(
                     context.Users,
                     x => x.AdminId,
                     y => y.Id,
-                    (x, y) => new HospitalAdminDTO
-                    {
-                        AdminId = y.Id,
+                    (x, y) => new HospitalAdminDTO{
+                        AdminId = x.AdminId,
                         Nombre = y.Nombre,
                         Apellido = y.Apellido
                     }
-                ).ToList();
-
-            if (hospitalAdmins is null)
+                )
+            .ToListAsync();
+            if(hospitalAdmins is null)
                 return NotFound();
             return hospitalAdmins;
         }
 
-
-        [Authorize(Roles = "SysAdmin")]
         [HttpGet("HospitalAdminAdded/{hospitalId}/{adminId}", Name = "HospitalAdminAdded")]
         public async Task<ActionResult<HospitalAdminCreatedDTO>> GetHospitalAdminAdded(string hospitalId, string adminId)
         {
@@ -106,7 +101,6 @@ namespace historial_blockchain.Controllers
             };
         }
 
-        [Authorize(Roles = "SysAdmin")]
         [HttpPost]
         public async Task<ActionResult<HospitalSpecialitiesDTO>> AddAdmin([FromBody] HospitalAdmin hospitalAdmin)
         {
@@ -120,9 +114,8 @@ namespace historial_blockchain.Controllers
             return new CreatedAtRouteResult($"HospitalAdminAdded", new { hospitalId = hospitalAdmin.HospitalId, adminId = hospitalAdmin.AdminId}, hospitalAdmin);
         }
 
-        [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
         [HttpDelete]
-        public async Task<ActionResult<HospitalAdministrador>> RemoveHospitalSpeciality([FromBody] HospitalAdmin hospitalAdmin)
+        public async Task<ActionResult<HospitalAdministrador>> RemoveHospitalAdmin([FromBody] HospitalAdmin hospitalAdmin)
         {
             var result = await context.HospitalAdministrador
                 .Where(x => x.AdminId.Equals(hospitalAdmin.AdminId))
@@ -133,7 +126,7 @@ namespace historial_blockchain.Controllers
             
             context.HospitalAdministrador.Remove(result);
             await context.SaveChangesAsync();
-            return result;
+            return Ok();
         }
     }
 }

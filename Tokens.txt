@@ -52,6 +52,7 @@ Clinic Admin
 }
 
 Pacs Admin
+DIEGO
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImVsZGllZ3VpdG9taXgiLCJVc2VySWQiOiJkYzJkNzE1YS1mOTQ1LTQ1MWMtOTE5Yi1jMzIxYzY5NTQwZWUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJQYWNzQWRtaW4iLCJleHAiOjE2MjM4MTkzMDh9.J2nqVNrHBq2a63Uv2CEksGKPa9aUtWyY_Y4G9w_EpcI",
   "expiration": "2021-06-16T04:55:08.1508099Z"
@@ -73,6 +74,42 @@ Pacs Admin
     "phonenumber" : "5543517482",
     "username" : "eldieguitomix"
 }
+BRYAN
+{
+  "id": "4bff98f2-2981-4ebb-92fb-7fc0365e76fa",
+  "nombre": "Bryan",
+  "apellido": "Valencia Badillo",
+  "userName": "elputo",
+  "email": "bryan@gmail.com",
+  "phoneNumber": "5543517482"
+}
+{
+    "apellido" : "Valencia Badillo",
+    "email" : "bryan@gmail.com",
+    "password" : "Bryan.123",
+    "confirmpassword" : "Bryan.123",
+    "nombre" : "Bryan",
+    "phonenumber" : "5543517482",
+    "username" : "elputo"
+}
+MARIANA
+{
+  "id": "092ad392-a0c0-4725-ba1a-d68da2e75bfe",
+  "nombre": "Mariana",
+  "apellido": "Perera Martinez",
+  "userName": "china",
+  "email": "mariana@gmail.com",
+  "phoneNumber": "5543517482"
+}
+{
+    "apellido" : "Perera Martinez",
+    "email" : "mariana@gmail.com",
+    "password" : "Mar.123",
+    "confirmpassword" : "Mar.123",
+    "nombre" : "Mariana",
+    "phonenumber" : "5543517482",
+    "username" : "china"
+}
 
 Clínica privada
 {
@@ -91,6 +128,10 @@ Hospital privado
 CONTROLADORES PROBADOS Y FUNCIONALES
 
 SpecialitiesCatalogController
+
+Hospitals
+HospitalSpecialities
+HospitalAdministrador
 CatalogOfServices
 Users
 
@@ -98,9 +139,6 @@ FALTAN
 
 Accounts
 Blockchain
-CatalogoGrupoMEdicamentos
-HospitalAdministrador
+CatalogoGrupoMedicamentos
 HospitalDoctors
 HospitalMedicamentos
-Hospitals
-HospitalSpecialities

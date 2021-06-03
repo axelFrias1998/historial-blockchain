@@ -15,6 +15,8 @@ namespace historial_blockchain.Models.DTOs
         
         public List<CreatedUserDTO> Admins { get; set; }
 
+        public List<SpecialitiesDTO> Especialidades { get; set; }
+
         public ServicesCatalogDTO ServicesCatalog { get; set; }
 
     }

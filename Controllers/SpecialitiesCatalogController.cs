@@ -18,7 +18,7 @@ namespace historial_blockchain.Contexts
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,Roles = "SysAdmin")]
     public class SpecialitiesCatalogController : ControllerBase
     {
         private readonly ApplicationDbContext contex;
@@ -30,7 +30,6 @@ namespace historial_blockchain.Contexts
             this.contex = context;
         }
 
-        [AllowAnonymous]
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SpecialitiesDTO>>>  GetSpecialities()
@@ -52,7 +51,6 @@ namespace historial_blockchain.Contexts
             return mapper.Map<SpecialitiesDTO>(specialitiescatalog);
         }
 
-        [Authorize(Roles = "SysAdmin")]
         [HttpPost]
         public async Task<ActionResult> CreateSpeciality([FromBody] SpecialityName specialityName)
         {
@@ -62,7 +60,6 @@ namespace historial_blockchain.Contexts
             return new CreatedAtRouteResult("SpecialityInfo", new { id = speciality.Id}, specialityName);
         }
 
-        [Authorize(Roles = "SysAdmin")]
         [HttpPut("{id}/{newName}")]
         public async Task<ActionResult> Put(int id, string newName)
         {
@@ -75,7 +72,6 @@ namespace historial_blockchain.Contexts
             return NoContent();
         }
 
-        [Authorize(Roles = "SysAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<SpecialitiesDTO>> Delete(int id)
         {
@@ -86,6 +82,5 @@ namespace historial_blockchain.Contexts
             await contex.SaveChangesAsync();
             return mapper.Map<SpecialitiesDTO>(speciality);
         }
-
     }
 }

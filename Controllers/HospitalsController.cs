@@ -52,21 +52,53 @@ namespace historial_blockchain.Controllers
                                  PhoneNumber = U.PhoneNumber
                              };
                 foreach (var admin in admins)
-                    hospital.Admins.Append(admin);
+                    hospital.Admins.Add(admin);
+                var especialidades = from HE in context.HospitalEspecialidades
+                            join S in context.SpecialitiesCatalog on HE.EspecialidadId equals S.Id
+                            where HE.HospitalId == hospital.HospitalId
+                            select new SpecialitiesDTO{
+                                Id = S.Id,
+                                Type = S.Type
+                            };
+                foreach (var especialidad in especialidades)
+                    hospital.Especialidades.Add(especialidad);
             }
             if(hospitalsDTO is null)
                 return NotFound();
-            return hospitalsDTO.ToList();
+            return hospitalsDTO;
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet("GetHospitalInfo/{id}", Name = "GetHospitalInfo")]
         public async Task<ActionResult<HospitalsDTO>> GetInfo(string id)
         {
-            var hospital = mapper.Map<HospitalsDTO>(await context.Hospitals.Include(x => x.ServicesCatalog).FirstOrDefaultAsync(x => x.HospitalId.Equals(id)));
-            if(hospital is null)
+            var hospitalDTO = mapper.Map<HospitalsDTO>(await context.Hospitals.Include(x => x.ServicesCatalog).FirstOrDefaultAsync(x => x.HospitalId.Equals(id)));
+            if(hospitalDTO is null)
                 return NotFound();
-            return hospital;
+            var admins = from HA in context.HospitalAdministrador
+                        join U in context.Users on HA.AdminId equals U.Id
+                        where HA.HospitalId == hospitalDTO.HospitalId
+                        select new CreatedUserDTO{
+                            Id = U.Id,
+                            Nombre = U.Nombre,
+                            Apellido = U.Apellido,
+                            UserName = U.UserName,
+                            Email = U.Email,
+                            PhoneNumber = U.PhoneNumber
+                        };
+            foreach (var admin in admins)
+                hospitalDTO.Admins.Add(admin);
+
+            var especialidades = from HE in context.HospitalEspecialidades
+                                join S in context.SpecialitiesCatalog on HE.EspecialidadId equals S.Id
+                                where HE.HospitalId == hospitalDTO.HospitalId
+                                select new SpecialitiesDTO{
+                                    Id = S.Id,
+                                    Type = S.Type
+                                };
+            foreach (var especialidad in especialidades)
+                hospitalDTO.Especialidades.Add(especialidad);
+            return hospitalDTO;
         }
 
         [Authorize(Roles = "SysAdmin")]
@@ -86,15 +118,6 @@ namespace historial_blockchain.Controllers
 
             var hospitalDTO = mapper.Map<CreatedHospitalDTO>(hospital);
             return new CreatedAtRouteResult($"GetHospitalInfo", new { id = hospitalDTO.HospitalId}, hospitalDTO);
-        }
-
-        [HttpGet("GetSpecialities/{id}", Name = "GetSpecialities")]
-        public async Task<ActionResult<IEnumerable<HospitalEspecialidad>>> GetSpecialities(string id)
-        {
-            var catalogOfSpecialities = await context.HospitalEspecialidades.Where(x => x.HospitalId.Equals(id)).Include(x => x.Especialidad).ThenInclude(x => x.Type).ToListAsync();
-            if(catalogOfSpecialities is null)
-                return NotFound();
-            return catalogOfSpecialities;
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
