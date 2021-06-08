@@ -50,7 +50,7 @@ namespace historial_blockchain
                 Configuration.CreateMap<HospitalSpecialitiesDTO, HospitalEspecialidad>().ReverseMap();
                 Configuration.CreateMap<HospitalSpeciality, HospitalEspecialidad>().ReverseMap();
                 Configuration.CreateMap<HospitalAdmin, HospitalAdministrador>().ReverseMap();
-                Configuration.CreateMap<ListadoGrupoMedicamentosDTO, CatalogoGrupoMedicamentos>();
+                Configuration.CreateMap<CatalogoGrupoMedicamentos, ListadoGrupoMedicamentosDTO>();
                 Configuration.CreateMap<HospitalMedicamentosCreateDTO, HospitalMedicamentos>().ReverseMap();
                 Configuration.CreateMap<HospitalMedicamentosUpdateDTO, HospitalMedicamentos>();
             } ,typeof(Startup));
@@ -62,6 +62,9 @@ namespace historial_blockchain
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(options => {
+                options.User.RequireUniqueEmail = true;
+            });
 
             services.AddControllers(options => 
                 {

@@ -29,3 +29,9 @@ WHERE (U.Id IN (SELECT AdminId FROM [GestorMedicos].[dbo].HospitalAdministrador)
 SELECT H.HospitalId, U.Id, U.Nombre, U.Apellido FROM [GestorMedicos].[dbo].AspNetUsers U
 INNER JOIN [GestorMedicos].[dbo].HospitalAdministrador HA ON HA.AdminId = U.Id  
 INNER JOIN [GestorMedicos].[dbo].Hospitals H ON H.HospitalId = HA.HospitalId
+
+--Doctor con especialidad y nombre de hospital al que pertenecen
+SELECT U.Nombre, SC.Type, H.Name FROM HospitalDoctor HD
+INNER JOIN AspNetUsers U ON U.Id = HD.DoctorId
+INNER JOIN SpecialitiesCatalog SC ON SC.Id = HD.EspecialidadId
+INNER JOIN Hospitals H ON H.HospitalId = HD.HospitalId

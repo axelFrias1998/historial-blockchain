@@ -13,7 +13,7 @@ namespace historial_blockchain.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin")]
     public class CatalogoGrupoMedicamentosController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -25,18 +25,16 @@ namespace historial_blockchain.Controllers
             this.mapper = mapper;
         }
         
-        [AllowAnonymous]
+        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ListadoGrupoMedicamentosDTO>>> GetGruposMedicamentos()
+        public async Task<ActionResult<IEnumerable<CatalogoGrupoMedicamentos>>> GetGruposMedicamentos()
         {
             var medicamentosCatalog = await context.CatalogoGrupoMedicamentos.ToListAsync();
             if(medicamentosCatalog is null)
                 return NotFound();
-            var medicamentosCatalogDTO = mapper.Map<List<ListadoGrupoMedicamentosDTO>>(medicamentosCatalog);
-            return medicamentosCatalogDTO;
+            return medicamentosCatalog;
         }
 
-        [Authorize(Roles = "SysAdmin")]
         [HttpGet("{id}", Name = "GrupoMedicamentosInfo")]
         public async Task<ActionResult<ListadoGrupoMedicamentosDTO>> GetGrupoMedicamentos(int id)
         {
@@ -46,7 +44,6 @@ namespace historial_blockchain.Controllers
             return mapper.Map<ListadoGrupoMedicamentosDTO>(medicamentosCatalog);
         }
 
-        [Authorize(Roles = "SysAdmin")]
         [HttpPost]
         public async Task<ActionResult> CreateGrupoMedicamentos([FromBody] ListadoGrupoMedicamentosDTO grupo)
         {
@@ -56,7 +53,6 @@ namespace historial_blockchain.Controllers
             return new CreatedAtRouteResult("GrupoMedicamentosInfo", new { id = grupoMedicamentos.Id }, grupo);
         }
 
-        [Authorize(Roles = "SysAdmin")]
         [HttpPut("{id}/{newName}")]
         public async Task<ActionResult> Put(int id, string newName)
         {
@@ -69,7 +65,6 @@ namespace historial_blockchain.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "SysAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ListadoGrupoMedicamentosDTO>> Delete(int id)
         {

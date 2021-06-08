@@ -114,6 +114,7 @@ namespace historial_blockchain.Controllers
             return new CreatedAtRouteResult($"HospitalAdminAdded", new { hospitalId = hospitalAdmin.HospitalId, adminId = hospitalAdmin.AdminId}, hospitalAdmin);
         }
 
+        //Probar eliminar administradores de tabla usuarios
         [HttpDelete]
         public async Task<ActionResult<HospitalAdministrador>> RemoveHospitalAdmin([FromBody] HospitalAdmin hospitalAdmin)
         {

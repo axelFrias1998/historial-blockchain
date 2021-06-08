@@ -8,6 +8,7 @@ namespace historial_blockchain.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        
         public ApplicationUser()
         {
             this.Hospitals = new List<Hospital>();

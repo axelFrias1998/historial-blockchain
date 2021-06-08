@@ -111,6 +111,68 @@ MARIANA
     "username" : "china"
 }
 
+DOCTORES
+Renata
+{
+  "id": "bf0ea8cd-f3d3-4dc6-a73c-c2e7f4f6be70",
+  "nombre": "Renata",
+  "apellido": "Urrutia Baez",
+  "userName": "renacuajo",
+  "email": "renu@gmail.com",
+  "phoneNumber": "5543517482"
+}
+{
+    "apellido" : "Urrutia Baez",
+    "email" : "renu@gmail.com",
+    "password" : "Renata.123",
+    "confirmpassword" : "Renata.123",
+    "nombre" : "Renata",
+    "phonenumber" : "5543517482",
+    "username" : "renacuajo",
+    "adminid" : "092ad392-a0c0-4725-ba1a-d68da2e75bfe",
+    "especialidadid" : 2
+}
+Froylan
+{
+  "id": "1b90c9a8-9eeb-41b0-a801-ad8bdb437055",
+  "nombre": "Froylan",
+  "apellido": "Aguirre Arroyo",
+  "userName": "froyojoto",
+  "email": "froy@gmail.com",
+  "phoneNumber": "5543517482"
+}
+{
+    "apellido" : "Aguirre Arroyo",
+    "email" : "froy@gmail.com",
+    "password" : "Froy.123",
+    "confirmpassword" : "Froy.123",
+    "nombre" : "Froylan",
+    "phonenumber" : "5543517482",
+    "username" : "froyojoto",
+    "adminid" : "092ad392-a0c0-4725-ba1a-d68da2e75bfe",
+    "especialidadid" : 2
+}
+Luis Silva
+{
+  "id": "c9dc8c30-07c8-44c1-a557-d003eb94b6c5",
+  "nombre": "Luis",
+  "apellido": "Silva",
+  "userName": "luisblanco",
+  "email": "luis@gmail.com",
+  "phoneNumber": "5543517482"
+}
+{
+    "apellido" : "Silva",
+    "email" : "luis@gmail.com",
+    "password" : "Luis.123",
+    "confirmpassword" : "Luis.123",
+    "nombre" : "Luis",
+    "phonenumber" : "5543517482",
+    "username" : "luisblanco",
+    "adminid" : "092ad392-a0c0-4725-ba1a-d68da2e75bfe",
+    "especialidadid" : 2
+}
+
 Clínica privada
 {
   "hospitalId": "3c5fe820-1646-4c55-bf0c-74f366a5fbc0",
@@ -128,7 +190,8 @@ Hospital privado
 CONTROLADORES PROBADOS Y FUNCIONALES
 
 SpecialitiesCatalogController
-
+HospitalDoctors
+CatalogoGrupoMedicamentos
 Hospitals
 HospitalSpecialities
 HospitalAdministrador
@@ -139,6 +202,6 @@ FALTAN
 
 Accounts
 Blockchain
-CatalogoGrupoMedicamentos
-HospitalDoctors
 HospitalMedicamentos
+
+//TODO que no se repitan los correos

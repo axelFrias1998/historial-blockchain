@@ -14,7 +14,7 @@ namespace historial_blockchain.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "PacsAdmin,ClinicAdmin")]
     public class HospitalMedicamentosController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -22,11 +22,14 @@ namespace historial_blockchain.Controllers
 
         public HospitalMedicamentosController(ApplicationDbContext context, IMapper mapper)
         {
-            this.context = context;
+            this.context = context;  
             this.mapper = mapper;
         }
 
-        [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
+        /// <summary>
+        /// Deletes a specific TodoItem.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpGet("{hospitalId}")]
         public async Task<ActionResult<IEnumerable<HospitalMedicamentosDTO>>> GetHospitalMedicamentos(string hospitalId)
         {
@@ -48,11 +51,10 @@ namespace historial_blockchain.Controllers
             return hospitalMedicamentos;
         }
 
-        [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
-        [HttpGet("GrupoMedicamento/{hospitalId}/{hospitalMedicamentoId}", Name = "GrupoMedicamento")]
-        public async Task<ActionResult<HospitalMedicamentosDTO>> GetHospitalMedicamentos(string hospitalId, int hospitalMedicamentoId)
+        [HttpGet("{hospitalId}/{medicamentoId}", Name = "GrupoMedicamento")]
+        public async Task<ActionResult<HospitalMedicamentosDTO>> GetHospitalMedicamentos(string hospitalId, int medicamentoId)
         {
-            var hospitalMedicamentos = await context.HospitalMedicamentos.Where(x => x.HospitalId.Equals(hospitalId)).Where(x => x.Id == hospitalMedicamentoId)
+            var hospitalMedicamentos = await context.HospitalMedicamentos.Where(x => x.HospitalId.Equals(hospitalId)).Where(x => x.Id == medicamentoId)
                 .Join(
                     context.CatalogoGrupoMedicamentos,
                     x => x.GrupoMedicamentosId,
@@ -70,7 +72,6 @@ namespace historial_blockchain.Controllers
             return hospitalMedicamentos;
         }
 
-        [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
         [HttpPost]
         public async Task<ActionResult<HospitalMedicamentosDTO>> AddHospitalMedicamentos([FromBody] HospitalMedicamentosCreateDTO hospitalMedicamentosCreateDTO)
         {
@@ -80,7 +81,6 @@ namespace historial_blockchain.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] HospitalMedicamentosUpdateDTO hospitalMedicamentosUpdateDTO)
         {
@@ -95,7 +95,6 @@ namespace historial_blockchain.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "PacsAdmin,ClinicAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<HospitalMedicamentosUpdateDTO>> Delete(int id)
         {   
