@@ -7,15 +7,12 @@ using Microsoft.AspNetCore.Identity;
 
 namespace historial_blockchain.Entities
 {
-    public class Consulta
+    public class Consulta : ConsultaMedica
     {
-        public Consulta()
-        {
-            this.Hospitals = new List<Hospital>();
-        }
         
         [Key]
-        public string ConsultaId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ConsultaId { get; set; }
 
         [Required]
         public DateTime DateStamp { get; set; }
@@ -26,11 +23,14 @@ namespace historial_blockchain.Entities
         [ForeignKey("Doctor")]
         public string DoctorId { get; set; }
 
+        [ForeignKey("Hospital")]
+        public string HospitalId { get; set; }
+
         public virtual ApplicationUser Paciente { get; set; }
 
         public virtual ApplicationUser Doctor { get; set; }
 
-        public virtual ICollection<Hospital> Hospitals { get; set ;}
+        public virtual Hospital Hospital { get; set; }
 
     }
 }

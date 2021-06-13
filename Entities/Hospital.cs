@@ -13,7 +13,6 @@ namespace historial_blockchain.Entities
         {
             this.Doctors = new List<ApplicationUser>();
             this.Especialidades = new List<SpecialitiesCatalog>();
-            this.Consultas = new List<Consulta>();
         }
 
         [Key]
@@ -41,6 +40,5 @@ namespace historial_blockchain.Entities
 
         public virtual ICollection<SpecialitiesCatalog> Especialidades { get; set ; }
 
-        public virtual ICollection<Consulta> Consultas { get; set ; }
     }
 }

@@ -40,10 +40,14 @@ namespace historial_blockchain.Controllers
                     y => y.Id,
                     (x, y) => new HospitalMedicamentosDTO
                     {
+                        Id = x.Id,
                         Descripcion = x.Descripcion,
                         Indicaciones = x.Indicaciones,
                         ViaAdministracion = x.ViaAdministracion,
-                        GrupoMedicamentos = y.Type 
+                        GrupoMedicamentos = y.Type,
+                        EfectosSecundarios = x.EfectosSecundarios,
+                        NombreMedicamento = x.NombreMedicamento,
+                        Precauciones = x.Precauciones
                     }
                 ).ToListAsync();
             if(hospitalMedicamentos is null)
@@ -51,7 +55,7 @@ namespace historial_blockchain.Controllers
             return hospitalMedicamentos;
         }
 
-        [HttpGet("{hospitalId}/{medicamentoId}", Name = "GrupoMedicamento")]
+        [HttpGet("{hospitalId}/{medicamentoId}")]
         public async Task<ActionResult<HospitalMedicamentosDTO>> GetHospitalMedicamentos(string hospitalId, int medicamentoId)
         {
             var hospitalMedicamentos = await context.HospitalMedicamentos.Where(x => x.HospitalId.Equals(hospitalId)).Where(x => x.Id == medicamentoId)
@@ -61,10 +65,14 @@ namespace historial_blockchain.Controllers
                     y => y.Id,
                     (x, y) => new HospitalMedicamentosDTO
                     {
+                        Id = x.Id,
                         Descripcion = x.Descripcion,
                         Indicaciones = x.Indicaciones,
                         ViaAdministracion = x.ViaAdministracion,
-                        GrupoMedicamentos = y.Type 
+                        GrupoMedicamentos = y.Type,
+                        EfectosSecundarios = x.EfectosSecundarios,
+                        NombreMedicamento = x.NombreMedicamento,
+                        Precauciones = x.Precauciones
                     }
                 ).FirstOrDefaultAsync();
             if(hospitalMedicamentos is null)
@@ -75,7 +83,19 @@ namespace historial_blockchain.Controllers
         [HttpPost]
         public async Task<ActionResult<HospitalMedicamentosDTO>> AddHospitalMedicamentos([FromBody] HospitalMedicamentosCreateDTO hospitalMedicamentosCreateDTO)
         {
-            var hospitalMedicamento = mapper.Map<HospitalMedicamentos>(hospitalMedicamentosCreateDTO);
+            var medExists = await context.HospitalMedicamentos.FirstOrDefaultAsync(x => x.HospitalId.Equals(hospitalMedicamentosCreateDTO.HospitalId) && x.NombreMedicamento.Equals(hospitalMedicamentosCreateDTO.NombreMedicamento.ToUpper()));
+            if(medExists is not null)
+                return BadRequest();
+            var hospitalMedicamento = new HospitalMedicamentos{
+                HospitalId = hospitalMedicamentosCreateDTO.HospitalId,
+                Descripcion = hospitalMedicamentosCreateDTO.Descripcion.ToUpper(),
+                ViaAdministracion = hospitalMedicamentosCreateDTO.ViaAdministracion,
+                Indicaciones = hospitalMedicamentosCreateDTO.Indicaciones,
+                NombreMedicamento = hospitalMedicamentosCreateDTO.NombreMedicamento.ToUpper(),
+                GrupoMedicamentosId = hospitalMedicamentosCreateDTO.GrupoMedicamentosId,
+                Precauciones = hospitalMedicamentosCreateDTO.Precauciones,
+                EfectosSecundarios = hospitalMedicamentosCreateDTO.EfectosSecundarios
+            };
             await context.HospitalMedicamentos.AddAsync(hospitalMedicamento);
             await context.SaveChangesAsync();
             return Ok();
@@ -90,6 +110,9 @@ namespace historial_blockchain.Controllers
             hospitalMedicamento.Descripcion = hospitalMedicamentosUpdateDTO.Descripcion;
             hospitalMedicamento.Indicaciones = hospitalMedicamentosUpdateDTO.Indicaciones;
             hospitalMedicamento.ViaAdministracion = hospitalMedicamentosUpdateDTO.ViaAdministracion;
+            hospitalMedicamento.NombreMedicamento = hospitalMedicamentosUpdateDTO.NombreMedicamento;
+            hospitalMedicamento.EfectosSecundarios = hospitalMedicamentosUpdateDTO.EfectosSecundarios;
+            hospitalMedicamento.Precauciones = hospitalMedicamentosUpdateDTO.Precauciones;
             context.Entry(hospitalMedicamento).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return NoContent();

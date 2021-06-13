@@ -154,7 +154,12 @@ Froylan
 }
 Luis Silva
 {
-  "id": "c9dc8c30-07c8-44c1-a557-d003eb94b6c5",
+  {
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Imx1aXNibGFuY28iLCJVc2VySWQiOiIxM2MyY2VmMi00NjA5LTRlYTItYmIxZi04Y2Y4ZjcyYzRkMWYiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJEb2N0b3IiLCJleHAiOjE2MjQ4Njk5ODN9._PI9VIfTdBzUg0tNDfiY7CQbOcc5pkoVoHjSbg3-wnI",
+  "expiration": "2021-06-28T08:46:23.5043828Z"
+}
+
+  "id": "13c2cef2-4609-4ea2-bb1f-8cf8f72c4d1f",
   "nombre": "Luis",
   "apellido": "Silva",
   "userName": "luisblanco",

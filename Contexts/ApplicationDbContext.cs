@@ -23,8 +23,6 @@ namespace historial_blockchain.Contexts
         public DbSet<HospitalMedicamentos> HospitalMedicamentos { get; set; }
         public DbSet<ServicesCatalog> ServicesCatalog { get; set; }
         public DbSet<SpecialitiesCatalog> SpecialitiesCatalog { get; set; }
-        //public DbSet<Consulta> Consulta { get; set; }
-
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -200,16 +198,6 @@ namespace historial_blockchain.Contexts
                         .WithMany().HasForeignKey(x => x.EspecialidadId),
                     x => x.HasOne(x => x.Hospital)
                         .WithMany().HasForeignKey(x => x.HospitalId)           
-                );
-            
-            builder.Entity<Hospital>()
-                .HasMany(x => x.Consultas)
-                .WithMany(x => x.Hospitals)
-                .UsingEntity<HospitalConsulta>(
-                    x => x.HasOne(x => x.Consulta)
-                        .WithMany().HasForeignKey(x => x.ConsultaId),
-                    x => x.HasOne(x => x.Hospital)
-                        .WithMany().HasForeignKey(x => x.HospitalId)
                 );
             #endregion
             

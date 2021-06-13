@@ -9,6 +9,8 @@ namespace historial_blockchain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        public string NombreMedicamento { get; set; }
+        
         public string Descripcion { get; set; }
 
         public string Indicaciones { get; set; }
@@ -20,6 +22,10 @@ namespace historial_blockchain.Entities
 
         [ForeignKey("Hospital")]
         public string HospitalId { get; set; }
+
+        public string Precauciones { get; set; }
+
+        public string EfectosSecundarios { get; set; }
 
         public virtual Hospital Hospital { get; set; }
 
