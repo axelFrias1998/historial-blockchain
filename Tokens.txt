@@ -8,10 +8,8 @@ SysAdmin
     "phonenumber" : "5543517482",
     "username" : "suripapi"
 }
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1cmlwYXBpIiwiVXNlcklkIjoiZTNjZDZiYWUtZjE5Ny00YWIyLWE1ZTQtNDI2ODk4ZjIxZjNkIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiU3lzQWRtaW4iLCJleHAiOjE2MjM4MTkxNTZ9.cWOT-mg_GVUHM7-qJt2U6ZYpaUXV39LrbBEEZIVblXU",
-  "expiration": "2021-06-16T04:52:36.021916Z"
-}
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1cmlwYXBpIiwiVXNlcklkIjoiY2Y5NmYwYWUtMzExZC00M2FhLThkMzQtZmQ4NjkzYzRlZDM3IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiU3lzQWRtaW4iLCJleHAiOjE2MjQ5NDU3NTV9.7vrpTCTCNyH_fL8AjzVTwrUzPwhbVdQ18LDs41TR628",
+  "expiration": "2021-06-29T05:49:15.8156443Z"
 
 Pacient
 LIZETH
@@ -66,11 +64,11 @@ Clinic Admin
 Pacs Admin
 DIEGO
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImVsZGllZ3VpdG9taXgiLCJVc2VySWQiOiJkYzJkNzE1YS1mOTQ1LTQ1MWMtOTE5Yi1jMzIxYzY5NTQwZWUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJQYWNzQWRtaW4iLCJleHAiOjE2MjM4MTkzMDh9.J2nqVNrHBq2a63Uv2CEksGKPa9aUtWyY_Y4G9w_EpcI",
-  "expiration": "2021-06-16T04:55:08.1508099Z"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImVsZGllZ3VpdG9taXgiLCJVc2VySWQiOiI5ZjczNTIxNy05MDk1LTQ1MmYtYmJkNy1iOWQ2MjI2ZjVlN2UiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJQYWNzQWRtaW4iLCJleHAiOjE2MjQ5NDU5MDl9.m7YLUzevKFiVP_gL61vrxqAy2e8uCJWo3-ufc__ZVME",
+  "expiration": "2021-06-29T05:51:49.4517487Z"
 }
 {
-  "id": "dc2d715a-f945-451c-919b-c321c69540ee",
+  "id": "9f735217-9095-452f-bbd7-b9d6226f5e7e",
   "nombre": "Diego",
   "apellido": "Ramirez Cazares",
   "userName": "eldieguitomix",
@@ -86,27 +84,9 @@ DIEGO
     "phonenumber" : "5543517482",
     "username" : "eldieguitomix"
 }
-BRYAN
-{
-  "id": "4bff98f2-2981-4ebb-92fb-7fc0365e76fa",
-  "nombre": "Bryan",
-  "apellido": "Valencia Badillo",
-  "userName": "elputo",
-  "email": "bryan@gmail.com",
-  "phoneNumber": "5543517482"
-}
-{
-    "apellido" : "Valencia Badillo",
-    "email" : "bryan@gmail.com",
-    "password" : "Bryan.123",
-    "confirmpassword" : "Bryan.123",
-    "nombre" : "Bryan",
-    "phonenumber" : "5543517482",
-    "username" : "elputo"
-}
 MARIANA
 {
-  "id": "092ad392-a0c0-4725-ba1a-d68da2e75bfe",
+  "id": "f968c25d-c828-4cac-aa7f-d42ca70687af",
   "nombre": "Mariana",
   "apellido": "Perera Martinez",
   "userName": "china",
@@ -122,11 +102,15 @@ MARIANA
     "phonenumber" : "5543517482",
     "username" : "china"
 }
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImNoaW5hIiwiVXNlcklkIjoiZjk2OGMyNWQtYzgyOC00Y2FjLWFhN2YtZDQyY2E3MDY4N2FmIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUGFjc0FkbWluIiwiZXhwIjoxNjI0OTQ1ODQ0fQ.S1Wr4mWD0d4mKkN-7cxc0QO2L1gh_rAuBNowWocVN4M",
+  "expiration": "2021-06-29T05:50:44.627133Z"
+}
 
 DOCTORES
 Renata
 {
-  "id": "bf0ea8cd-f3d3-4dc6-a73c-c2e7f4f6be70",
+  "id": "5bfecfcd-bfd1-46b6-85d8-9f4d7d38de6f",
   "nombre": "Renata",
   "apellido": "Urrutia Baez",
   "userName": "renacuajo",
@@ -146,7 +130,7 @@ Renata
 }
 Froylan
 {
-  "id": "1b90c9a8-9eeb-41b0-a801-ad8bdb437055",
+  "id": "739436e7-e566-4f63-83c6-f9d4c5001246",
   "nombre": "Froylan",
   "apellido": "Aguirre Arroyo",
   "userName": "froyojoto",
@@ -164,44 +148,12 @@ Froylan
     "adminid" : "092ad392-a0c0-4725-ba1a-d68da2e75bfe",
     "especialidadid" : 2
 }
-Luis Silva
-{
-  {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Imx1aXNibGFuY28iLCJVc2VySWQiOiIxM2MyY2VmMi00NjA5LTRlYTItYmIxZi04Y2Y4ZjcyYzRkMWYiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJEb2N0b3IiLCJleHAiOjE2MjQ4Njk5ODN9._PI9VIfTdBzUg0tNDfiY7CQbOcc5pkoVoHjSbg3-wnI",
-  "expiration": "2021-06-28T08:46:23.5043828Z"
-}
-
-  "id": "13c2cef2-4609-4ea2-bb1f-8cf8f72c4d1f",
-  "nombre": "Luis",
-  "apellido": "Silva",
-  "userName": "luisblanco",
-  "email": "luis@gmail.com",
-  "phoneNumber": "5543517482"
-}
-{
-    "apellido" : "Silva",
-    "email" : "luis@gmail.com",
-    "password" : "Luis.123",
-    "confirmpassword" : "Luis.123",
-    "nombre" : "Luis",
-    "phonenumber" : "5543517482",
-    "username" : "luisblanco",
-    "adminid" : "092ad392-a0c0-4725-ba1a-d68da2e75bfe",
-    "especialidadid" : 2
-}
-
-Clínica privada
-{
-  "hospitalId": "3c5fe820-1646-4c55-bf0c-74f366a5fbc0",
-  "name": "Clínica San Rafael",
-  "phoneNumber": "5587948632"
-}
 
 Hospital privado
 {
-  "hospitalId": "3bd8f544-fc4f-457f-91e7-584f4f61dfad",
-  "name": "Hospital Ángeles",
-  "phoneNumber": "5541748252"
+  "hospitalId": "80e82f47-8db9-4ba6-8fa4-b7ff59826c41",
+  "name": "Hospital Médica Sur",
+  "phoneNumber": "5541748272"
 }
 
 CONTROLADORES PROBADOS Y FUNCIONALES
@@ -213,12 +165,11 @@ Hospitals
 HospitalSpecialities
 HospitalAdministrador
 CatalogOfServices
+Accounts
+HospitalMedicamentos
 Users
 
 FALTAN
-
-Accounts
 Blockchain
-HospitalMedicamentos
-
+HospitalConsultas
 //TODO que no se repitan los correos

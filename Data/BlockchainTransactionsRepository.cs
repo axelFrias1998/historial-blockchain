@@ -12,13 +12,12 @@ namespace historial_blockchain.Data
 {
     public class BlockchainTransactionsRepository
     {
-        private readonly IMongoClient client;
         private readonly IMongoDatabase database;
         private readonly IMongoCollection<TransactionBlock> transactionCollection;
 
         public BlockchainTransactionsRepository(IConfiguration configuration)
         {
-            this.client = new MongoClient(configuration.GetConnectionString("MongoConnection"));
+            IMongoClient client = new MongoClient(configuration.GetConnectionString("MongoConnection"));
             this.database = client.GetDatabase("ConsultasMedicas");
             this.transactionCollection = database.GetCollection<TransactionBlock>("transactions");
         }
