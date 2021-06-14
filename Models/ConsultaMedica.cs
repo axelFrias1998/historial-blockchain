@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace historial_blockchain.Models
 {
     public class ConsultaMedica
@@ -33,6 +35,8 @@ namespace historial_blockchain.Models
        //Pruebas Dx
         public string Pruebas { get; set; }
 
+        public List<PlanMedicamento> PlanMedicamentos { get; set; }
+        
         public string PlanTerapeutico { get; set; }
         
         //Indicaciones o recomendaciones

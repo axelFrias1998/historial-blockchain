@@ -20,6 +20,7 @@ using historial_blockchain.Enums;
 using Microsoft.AspNetCore.DataProtection;
 using historial_blockchain.Services;
 using System.Security.Cryptography;
+using historial_blockchain.Data;
 
 namespace historial_blockchain.Contexts
 {
@@ -34,8 +35,9 @@ namespace historial_blockchain.Contexts
         private readonly IMapper mapper;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly BlockchainTransactionsRepository repository;
 
-        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, ApplicationDbContext context, IMapper mapper, HashService hashService)
+        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, ApplicationDbContext context, IMapper mapper, HashService hashService, BlockchainTransactionsRepository repository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -43,6 +45,7 @@ namespace historial_blockchain.Contexts
             this.context = context;
             this.mapper = mapper;
             this.hashService = hashService;
+            this.repository = repository;
         }
 
         [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
@@ -115,9 +118,14 @@ namespace historial_blockchain.Contexts
                 var userData = await _userManager.FindByEmailAsync(userInfo.Email);
                 await _userManager.AddClaimAsync(userData, new Claim(ClaimTypes.Role, "Pacient"));
                 await _userManager.AddToRoleAsync(userData, "Pacient");
-                
                 string genNodeId = EncryptText($"123_{userData.Id}_456", $"prot_{userInfo.UserName}.{userInfo.Password}_ector");
                 //TODO Aquí hay que crear el nodo en Mongo
+                await repository.InsertTransaction(new TransactionBlock{
+                    TimeStamp = DateTime.Now,
+                    Hash = genNodeId,
+                    NextHash = string.Empty,
+                    Type = "Creación de nodo génesis. Primera transacción de paciente."
+                });
                 return File(Encoding.UTF8.GetBytes(genNodeId), "text/plain", $"{userData.Nombre}_genNode.gti");
             }
             return BadRequest("Datos incorrectos");

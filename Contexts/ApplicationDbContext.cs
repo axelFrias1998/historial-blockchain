@@ -9,15 +9,12 @@ namespace historial_blockchain.Contexts
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-            
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<CatalogoGrupoMedicamentos> CatalogoGrupoMedicamentos { get; set; }
-        public DbSet<Consulta> Consultas { get; set; }
         public DbSet<Hospital> Hospitals { get; set; }
         public DbSet<HospitalAdministrador> HospitalAdministrador { get; set; }
+        public DbSet<HospitalConsulta> HospitalConsulta { get; set; }
         public DbSet<HospitalDoctor> HospitalDoctor { get; set; }
         public DbSet<HospitalEspecialidad> HospitalEspecialidades { get; set;}
         public DbSet<HospitalMedicamentos> HospitalMedicamentos { get; set; }

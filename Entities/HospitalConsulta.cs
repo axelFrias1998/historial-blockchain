@@ -1,15 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using historial_blockchain.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace historial_blockchain.Entities
 {
-    public class Consulta : ConsultaMedica
+    public class HospitalConsulta
     {
-        
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ConsultaId { get; set; }
@@ -31,6 +28,5 @@ namespace historial_blockchain.Entities
         public virtual ApplicationUser Doctor { get; set; }
 
         public virtual Hospital Hospital { get; set; }
-
     }
 }

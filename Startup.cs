@@ -40,6 +40,7 @@ namespace historial_blockchain
         {
             //services.AddCors();
             services.AddScoped<HospitalAdministradoresRepository>();
+            services.AddScoped<BlockchainTransactionsRepository>();
             services.AddAutoMapper(Configuration => 
             {
                 Configuration.CreateMap<ApplicationUser, CreatedUserDTO>();

@@ -14,6 +14,7 @@ SysAdmin
 }
 
 Pacient
+LIZETH
 {
     "apellido" : "Hernández Julian",
     "email" : "lizju@gmail.com",
@@ -26,6 +27,17 @@ Pacient
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImxhbWFtaSIsIlVzZXJJZCI6ImMxZjE2NjI0LTNjYjgtNDhiYi05ZjhiLTk0MzI0NDY5MGQxNyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlBhY2llbnQiLCJleHAiOjE2MjM4MTkzNTF9.45Jw5Yd765nSRAw8JsulPWxLgB3rblEzcS52yrRxfLQ",
   "expiration": "2021-06-16T04:55:51.1061098Z"
+}
+
+MARIEL
+{
+    "apellido" : "Espinosa Hernández",
+    "email" : "mariel@gmail.com",
+    "password" : "Mariel.123",
+    "confirmpassword" : "Mariel.123",
+    "nombre" : "Mariel",
+    "username" : "lameca",
+    "phonenumber" : "5543517482"
 }
 
 Clinic Admin
