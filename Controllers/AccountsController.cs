@@ -95,7 +95,8 @@ namespace historial_blockchain.Contexts
                         Password = userInfo.Password
                     }, 
                     roles,
-                    userData.Id);
+                    userData.Id,
+                    userData.Nombre);
             }
             return BadRequest("Datos incorrectos");
         }
@@ -203,26 +204,11 @@ namespace historial_blockchain.Contexts
             {
                 var user = await _userManager.FindByNameAsync(userLogin.Username);
                 var roles = await _userManager.GetRolesAsync(user);
-                return BuildToken(userLogin, roles, user.Id);
+                return BuildToken(userLogin, roles, user.Id, user.Nombre);
             }
             ModelState.AddModelError(string.Empty, "Ingreso fallido");
             return BadRequest(ModelState);
         }
-
-        /*[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
-        [HttpDelete("DeleteDoctor")]
-        public async Task<ActionResult<UserToken>> DeleteDoctor([FromBody] UserLogin userLogin)
-        {
-            var result = await _signInManager.PasswordSignInAsync(userLogin.Username, userLogin.Password, isPersistent: true, lockoutOnFailure: false);
-            if(result.Succeeded)
-            {
-                var user = await _userManager.FindByNameAsync(userLogin.Username);
-                var roles = await _userManager.GetRolesAsync(user);
-                return BuildToken(userLogin, roles, user.Id);
-            }
-            ModelState.AddModelError(string.Empty, "Ingreso fallido");
-            return BadRequest(ModelState);
-        }*/
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(string id, [FromBody] UpdateUserDTO updateUserDTO)
@@ -242,40 +228,11 @@ namespace historial_blockchain.Contexts
             return NoContent();
         }
 
-        private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId, UserType userType)
+        private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId, string name)
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Username),
-                new Claim("UserId", userId)
-            };
-
-            foreach (var role in roles)
-                claims.Add(new Claim(ClaimTypes.Role, role));
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var expiration = DateTime.UtcNow.AddDays(15);
-
-            JwtSecurityToken token = new JwtSecurityToken(
-                issuer: null,
-                audience: null,
-                claims: claims,
-                expires: expiration,
-                signingCredentials: creds
-            );
-
-            return new UserToken(){
-                Expiration = expiration,
-                Token = new JwtSecurityTokenHandler().WriteToken(token)
-            };
-        }
-
-        private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId)
-        {
-            var claims = new List<Claim>
-            {
+                new Claim("NombreUsuario", name),
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Username),
                 new Claim("UserId", userId)
             };
