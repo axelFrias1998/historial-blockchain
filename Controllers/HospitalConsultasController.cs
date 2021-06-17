@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,43 @@ namespace historial_blockchain.Controllers
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
         
+        [AllowAnonymous]
+        [HttpGet("{genNode}/{pacientId}")]
+        public async Task<ActionResult<MiCalendarioConsultasDTO>> GetTransactions(string genNode, string pacientId)
+        {
+            var calendarioConsultasDTO = new MiCalendarioConsultasDTO();
+            var hospitalConsultas = from HC in context.HospitalConsulta
+                                    join U in context.Users on HC.DoctorId equals U.Id
+                                    join H in context.Hospitals on HC.HospitalId equals H.HospitalId
+                                    where HC.PacienteId == pacientId
+                                    select new MisConsultasDTO
+                                    {
+                                        NombreDoctor = U.Nombre,
+                                        NombreHospital = H.Name,
+                                        FechaConsulta = HC.DateStamp
+                                    };
+
+            var misMedicamentos = new List<PlanMedicamento>();
+            foreach (var consultas in await repository.GetTransactions(genNode))
+            {
+                if(consultas.ConsultaMedica is not null)
+                {
+                    foreach (var medicamento in consultas.ConsultaMedica.PlanMedicamentos)
+                        misMedicamentos.Add(medicamento);
+                }
+            }
+
+            calendarioConsultasDTO.MisConsultas = hospitalConsultas.ToList();
+            calendarioConsultasDTO.MisMedicamentos = misMedicamentos;
+            return calendarioConsultasDTO;
+        }
+
+        [HttpGet("GetTransactions/{genNode}")]
+        public async Task<ActionResult<IEnumerable<TransactionBlock>>> GetTransactions(string genNode)
+        {
+            return await repository.GetTransactions(genNode);
+        }
+
         [HttpPost("GetNode/{username}/{password}")]
         public async Task<ActionResult<ConsultaKeyDTO>> GetNode([FromForm(Name = "file")] IFormFile file, string username, string password)
         {
@@ -63,13 +101,6 @@ namespace historial_blockchain.Controllers
             }
             return BadRequest("Datos incorrectos");
         }
-
-        [HttpGet("GetTransactions/{genNode}")]
-        public async Task<ActionResult<IEnumerable<TransactionBlock>>> GetTransactions(string genNode)
-        {
-            return await repository.GetTransactions(genNode);
-        }
-
 
         [HttpPost]
         public async Task<ActionResult<CreateConsultaDTO>> InsertConsulta(CreateConsultaDTO createConsultaDTO)
