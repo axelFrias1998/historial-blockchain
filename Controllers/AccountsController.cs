@@ -96,7 +96,8 @@ namespace historial_blockchain.Contexts
                     }, 
                     roles,
                     userData.Id,
-                    userData.Nombre);
+                    userData.Nombre,
+                    string.Empty);
             }
             return BadRequest("Datos incorrectos");
         }
@@ -123,7 +124,7 @@ namespace historial_blockchain.Contexts
                 //TODO Aquí hay que crear el nodo en Mongo
                 await repository.InsertTransaction(new TransactionBlock{
                     TimeStamp = DateTime.Now,
-                    Hash = genNodeId,
+                    Hash = $"123_{userData.Id}_456",
                     NextHash = string.Empty,
                     Type = "Creación de nodo génesis. Primera transacción de paciente."
                 });
@@ -204,7 +205,17 @@ namespace historial_blockchain.Contexts
             {
                 var user = await _userManager.FindByNameAsync(userLogin.Username);
                 var roles = await _userManager.GetRolesAsync(user);
-                return BuildToken(userLogin, roles, user.Id, user.Nombre);
+                if(roles.Contains("Doctor"))
+                {
+                    var hospitalDoctor = await context.HospitalDoctor.FirstOrDefaultAsync(x => x.DoctorId.Equals(user.Id));
+                    return BuildToken(userLogin, roles, user.Id, user.Nombre, hospitalDoctor.HospitalId);
+                }
+                else if(roles.Contains("PacsAdmin") || roles.Contains("ClinicAdmin"))
+                {
+                    var hospitalAdministrador = await context.HospitalAdministrador.FirstOrDefaultAsync(x => x.AdminId.Equals(user.Id));
+                    return BuildToken(userLogin, roles, user.Id, user.Nombre, hospitalAdministrador.HospitalId);
+                }
+                return BuildToken(userLogin, roles, user.Id, user.Nombre, string.Empty);
             }
             ModelState.AddModelError(string.Empty, "Ingreso fallido");
             return BadRequest(ModelState);
@@ -228,10 +239,11 @@ namespace historial_blockchain.Contexts
             return NoContent();
         }
 
-        private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId, string name)
+        private UserToken BuildToken(UserLogin userInfo, IList<string> roles, string userId, string name, string hospitalId)
         {
             var claims = new List<Claim>
             {
+                new Claim("HospitalId", hospitalId),
                 new Claim("NombreUsuario", name),
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Username),
                 new Claim("UserId", userId)

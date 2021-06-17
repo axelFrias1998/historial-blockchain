@@ -43,14 +43,13 @@ namespace historial_blockchain.Data
         public async Task<List<TransactionBlock>> GetTransactions(string genNodeId)
         {
             var transactions = new List<TransactionBlock>();
-            
             var filter = Builders<TransactionBlock>.Filter.Eq("Hash", genNodeId);
             string nextHash;
             while (true)
             {
                 var result = await transactionCollection.Find(filter).FirstOrDefaultAsync();
                 transactions.Add(result);
-                if(result.NextHash.Equals(string.Empty))
+                if(string.IsNullOrEmpty(result.NextHash))
                     break;
                 nextHash = result.NextHash;
                 filter = Builders<TransactionBlock>.Filter.Eq("Hash", nextHash);
@@ -61,34 +60,27 @@ namespace historial_blockchain.Data
         private async Task<TransactionBlock> GetLastTransaction(string genNodeId)
         {
             var filter = Builders<TransactionBlock>.Filter.Eq("Hash", genNodeId);
-            string nextHash;
+            var result = await transactionCollection.Find(filter).FirstOrDefaultAsync();
+            if(string.IsNullOrEmpty(result.NextHash))
+                return result;
+            string nextHash = result.NextHash;
             while (true)
             {
-                var result = await transactionCollection.Find(filter).FirstOrDefaultAsync();
-                if(result.NextHash.Equals(string.Empty))
-                    return result;
-                nextHash = result.NextHash;
-                filter = Builders<TransactionBlock>.Filter.Eq("Hash", nextHash);
+                var filterIteration = Builders<TransactionBlock>.Filter.Eq("Hash", nextHash);
+                var resultIteration = await transactionCollection.Find(filterIteration).FirstOrDefaultAsync();
+                if(string.IsNullOrEmpty(resultIteration.NextHash))
+                    return resultIteration;
+                nextHash = resultIteration.NextHash;
             }
         }
 
         private async Task<string> UpdateNextHash(TransactionBlock transactionBlock)
         {
-            string nextHash = CreateHash(transactionBlock.Hash, transactionBlock.TimeStamp);
+            string nextHash = Guid.NewGuid().ToString();
             var filter = Builders<TransactionBlock>.Filter.Eq("_id", transactionBlock.Id);
             var update = Builders<TransactionBlock>.Update.Set("nextHash", nextHash);
             var result = await transactionCollection.UpdateOneAsync(filter, update);
             return (result.MatchedCount != 0) ? nextHash : string.Empty;
-        }
-
-        private string CreateHash(string previousHash, DateTime timeStamp)
-        {
-            using(SHA256 sha256 = SHA256.Create())
-            {
-                string rawData = $"{previousHash}{timeStamp.ToLongTimeString()}NewTransaction";
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-                return Encoding.Default.GetString(bytes);
-            }
         }
     }
 }

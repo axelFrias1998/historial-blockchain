@@ -110,6 +110,10 @@ MARIANA
 DOCTORES
 Renata
 {
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOb21icmVVc3VhcmlvIjoiUmVuYXRhIiwidW5pcXVlX25hbWUiOiJyZW5hY3Vham8iLCJVc2VySWQiOiI1YmZlY2ZjZC1iZmQxLTQ2YjYtODVkOC05ZjRkN2QzOGRlNmYiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJEb2N0b3IiLCJleHAiOjE2MjUxOTAxMDl9.P21s7AMkjg6XIqWYyx9rnc4lsHv8JIdVKZWggMXQMK0",
+  "expiration": "2021-07-02T01:41:49.8348751Z"
+}
+{
   "id": "5bfecfcd-bfd1-46b6-85d8-9f4d7d38de6f",
   "nombre": "Renata",
   "apellido": "Urrutia Baez",

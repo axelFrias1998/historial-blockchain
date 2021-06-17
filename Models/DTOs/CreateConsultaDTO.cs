@@ -9,7 +9,7 @@ namespace historial_blockchain.Models.DTOs
         public string HospitalId { get; set; }
 
         public ConsultaMedica ConsultaMedica { get; set; }
-
+        
         public string GenNodeId { get; set; }
     }
 }

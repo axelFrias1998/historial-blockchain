@@ -43,5 +43,7 @@ namespace historial_blockchain.Models
         public string Educacion { get; set; }
 
         public string Seguimiento { get; set; }
+
+        public HistoriaClinica HistoriaClinica { get; set; }
     }
 }

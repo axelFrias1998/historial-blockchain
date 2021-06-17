@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -62,6 +63,13 @@ namespace historial_blockchain.Controllers
             }
             return BadRequest("Datos incorrectos");
         }
+
+        [HttpGet("GetTransactions/{genNode}")]
+        public async Task<ActionResult<IEnumerable<TransactionBlock>>> GetTransactions(string genNode)
+        {
+            return await repository.GetTransactions(genNode);
+        }
+
 
         [HttpPost]
         public async Task<ActionResult<CreateConsultaDTO>> InsertConsulta(CreateConsultaDTO createConsultaDTO)
