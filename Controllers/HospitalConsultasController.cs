@@ -79,6 +79,8 @@ namespace historial_blockchain.Controllers
         [HttpPost("GetNode")]
         public async Task<ActionResult<ConsultaKeyDTO>> GetNode([FromBody] PacientValidation pacientValidation)
         {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
             if(pacientValidation.File is null || pacientValidation.File.Length < 0)
                 return BadRequest();
 
