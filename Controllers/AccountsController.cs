@@ -255,7 +255,6 @@ namespace historial_blockchain.Contexts
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            //TODO Reducir el tiempo del token. Está así por pruebas
             var expiration = DateTime.UtcNow.AddDays(15);
 
             JwtSecurityToken token = new JwtSecurityToken(

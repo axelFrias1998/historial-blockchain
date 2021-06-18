@@ -13,7 +13,7 @@ namespace historial_blockchain.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
     public class CatalogoGrupoMedicamentosController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -25,7 +25,6 @@ namespace historial_blockchain.Controllers
             this.mapper = mapper;
         }
         
-        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CatalogoGrupoMedicamentos>>> GetGruposMedicamentos()
         {
