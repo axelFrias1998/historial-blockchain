@@ -18,7 +18,7 @@ namespace historial_blockchain.Contexts
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,Roles = "SysAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
     public class SpecialitiesCatalogController : ControllerBase
     {
         private readonly ApplicationDbContext contex;
@@ -30,7 +30,6 @@ namespace historial_blockchain.Contexts
             this.contex = context;
         }
 
-        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SpecialitiesDTO>>>  GetSpecialities()
         {
@@ -41,7 +40,6 @@ namespace historial_blockchain.Contexts
             return specialitiesDTO;
         }
 
-        [Authorize(Roles = "SysAdmin,PacsAdmin,ClinicAdmin")]
         [HttpGet("{id}", Name = "SpecialityInfo")]
         public async Task<ActionResult<SpecialitiesDTO>> GetSpecialityInfo(int id)
         {
