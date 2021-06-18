@@ -46,6 +46,7 @@ namespace historial_blockchain.Controllers
                 return NotFound();
             return hospitalSpeciality;
         }
+        
         [HttpGet("HospitalSpeciality/{hospitalId}/{specialityId}", Name = "HospitalSpeciality")]
         public async Task<ActionResult<HospitalSpecialitiesDTO>> GetHospitalSpeciality(string hospitalId, int specialityId)
         {

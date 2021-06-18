@@ -76,22 +76,22 @@ namespace historial_blockchain.Controllers
             return await repository.GetTransactions(genNode);
         }
 
-        [HttpPost("GetNode/{username}/{password}")]
-        public async Task<ActionResult<ConsultaKeyDTO>> GetNode([FromForm(Name = "file")] IFormFile file, string username, string password)
+        [HttpPost("GetNode")]
+        public async Task<ActionResult<ConsultaKeyDTO>> GetNode([FromForm(Name = "file")] PacientValidation pacientValidation)
         {
-            if(file is null || file.Length < 0)
+            if(pacientValidation.File is null || pacientValidation.File.Length < 0)
                 return BadRequest();
 
-            var result = await signInManager.PasswordSignInAsync(username, password, isPersistent: true, lockoutOnFailure: false);
+            var result = await signInManager.PasswordSignInAsync(pacientValidation.Username, pacientValidation.Password, isPersistent: true, lockoutOnFailure: false);
             if(result.Succeeded)
             {
                 var text = new StringBuilder();
-                using var reader = new StreamReader(file.OpenReadStream());
+                using var reader = new StreamReader(pacientValidation.File.OpenReadStream());
                 while (reader.Peek() >= 0)
                     text.AppendLine(await reader.ReadLineAsync());
                 string textoArchivo = text.ToString();
-                string textoDesencriptado = DecryptFile(textoArchivo, $"prot_{username}.{password}_ector");
-                var pacient = await userManager.FindByNameAsync(username);
+                string textoDesencriptado = DecryptFile(textoArchivo, $"prot_{pacientValidation.Username}.{pacientValidation.Password}_ector");
+                var pacient = await userManager.FindByNameAsync(pacientValidation.Username);
                 var consultaKey = new ConsultaKeyDTO
                 {
                     GenNode = textoDesencriptado,
