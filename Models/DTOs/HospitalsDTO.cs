@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using historial_blockchain.Entities;
 
 namespace historial_blockchain.Models.DTOs
 {
@@ -17,7 +18,7 @@ namespace historial_blockchain.Models.DTOs
 
         public List<SpecialitiesDTO> Especialidades { get; set; }
 
-        public ServicesCatalogDTO ServicesCatalog { get; set; }
+        public ServicesCatalog ServicesCatalog { get; set; }
 
     }
 }

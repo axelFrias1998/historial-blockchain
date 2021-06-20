@@ -115,12 +115,12 @@ namespace historial_blockchain.Controllers
         }
 
         //Probar eliminar administradores de tabla usuarios
-        [HttpDelete]
-        public async Task<ActionResult<HospitalAdministrador>> RemoveHospitalAdmin([FromBody] HospitalAdmin hospitalAdmin)
+        [HttpDelete("{hospitalId}/{adminId}")]
+        public async Task<ActionResult<HospitalAdministrador>> RemoveHospitalAdmin(string hospitalId, string adminId)
         {
             var result = await context.HospitalAdministrador
-                .Where(x => x.AdminId.Equals(hospitalAdmin.AdminId))
-                .Where(x => x.HospitalId.Equals(hospitalAdmin.HospitalId)).FirstOrDefaultAsync();
+                .Where(x => x.AdminId.Equals(adminId))
+                .Where(x => x.HospitalId.Equals(hospitalId)).FirstOrDefaultAsync();
             
             if(result is null)
                 return NotFound();

@@ -78,12 +78,12 @@ namespace historial_blockchain.Controllers
             return new CreatedAtRouteResult("HospitalSpeciality", new { hospitalId = newHospitalSpeciality.HospitalId, specialityId = newHospitalSpeciality.EspecialidadId}, newHospitalSpeciality);
         }
 
-        [HttpDelete]
-        public async Task<ActionResult<HospitalEspecialidad>> RemoveHospitalSpeciality([FromBody] HospitalSpeciality hospitalSpeciality)
+        [HttpDelete("{hospitalId}/{specialityId}")]
+        public async Task<ActionResult<HospitalEspecialidad>> RemoveHospitalSpeciality(string hospitalId, int specialityId)
         {
             var result = await context.HospitalEspecialidades
-                .Where(x => x.EspecialidadId == hospitalSpeciality.EspecialidadId)
-                .Where(x => x.HospitalId.Equals(hospitalSpeciality.HospitalId)).FirstOrDefaultAsync();
+                .Where(x => x.EspecialidadId == specialityId)
+                .Where(x => x.HospitalId.Equals(hospitalId)).FirstOrDefaultAsync();
             
             if(result is null)
                 return NotFound();
