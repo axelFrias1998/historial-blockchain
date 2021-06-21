@@ -2,8 +2,8 @@ namespace historial_blockchain.Models.DTOs
 {
     public class HospitalSpecialitiesDTO
     {
-        public int EspecialidadId { get; set; }
+        public int Id { get; set; }
 
-        public string Nombre { get; set; }
+        public string Type { get; set; }
     }
 }

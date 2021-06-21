@@ -38,8 +38,8 @@ namespace historial_blockchain.Controllers
                     y => y.Id,
                     (x, y) => new HospitalSpecialitiesDTO
                     {
-                        EspecialidadId = x.EspecialidadId,
-                        Nombre = y.Type
+                        Id = x.EspecialidadId,
+                        Type = y.Type
                     }
                 ).ToListAsync();
             if(hospitalSpeciality is null)
@@ -57,8 +57,8 @@ namespace historial_blockchain.Controllers
                     y => y.Id,
                     (x, y) => new HospitalSpecialitiesDTO
                     {
-                        EspecialidadId = x.EspecialidadId,
-                        Nombre = y.Type
+                        Id = x.EspecialidadId,
+                        Type = y.Type
                     }
                 ).FirstOrDefaultAsync();
             if(hospitalSpeciality is null)
