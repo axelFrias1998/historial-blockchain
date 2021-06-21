@@ -35,7 +35,7 @@ namespace historial_blockchain.Models
        //Pruebas Dx
         public string Pruebas { get; set; }
 
-        public List<PlanMedicamento> PlanMedicamentos { get; set; }
+        public PlanMedicamento PlanMedicamentos { get; set; }
         
         public string PlanTerapeutico { get; set; }
         

@@ -205,7 +205,12 @@ namespace historial_blockchain.Contexts
             {
                 var user = await _userManager.FindByNameAsync(userLogin.Username);
                 var roles = await _userManager.GetRolesAsync(user);
-                if(roles.Contains("Doctor"))
+                if(roles.Contains("ClinicAdmin") && roles.Contains("Doctor"))
+                {
+                    var hospitalAdministrador = await context.HospitalAdministrador.FirstOrDefaultAsync(x => x.AdminId.Equals(user.Id));
+                    return BuildToken(userLogin, roles, user.Id, user.Nombre, hospitalAdministrador.HospitalId);
+                }
+                else if(roles.Contains("Doctor") && !roles.Contains("ClinicAdmin"))
                 {
                     var hospitalDoctor = await context.HospitalDoctor.FirstOrDefaultAsync(x => x.DoctorId.Equals(user.Id));
                     return BuildToken(userLogin, roles, user.Id, user.Nombre, hospitalDoctor.HospitalId);

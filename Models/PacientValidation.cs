@@ -11,7 +11,5 @@ namespace historial_blockchain.Models
         public string Password { get; set; }
 
         public IFormFile File { get; set; }
-
-        public string FileName => File?.FileName;
     }
 }

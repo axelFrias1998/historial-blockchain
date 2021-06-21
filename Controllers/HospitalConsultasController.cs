@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace historial_blockchain.Controllers
 {
@@ -60,13 +61,12 @@ namespace historial_blockchain.Controllers
             {
                 if(consultas.ConsultaMedica is not null)
                 {
-                    foreach (var medicamento in consultas.ConsultaMedica.PlanMedicamentos)
-                        misMedicamentos.Add(medicamento);
+                    misMedicamentos.Add(consultas.ConsultaMedica.PlanMedicamentos);
                 }
             }
-
-            calendarioConsultasDTO.MisConsultas = hospitalConsultas.ToList();
-            calendarioConsultasDTO.MisMedicamentos = misMedicamentos;
+//
+            //calendarioConsultasDTO.MisConsultas = hospitalConsultas.ToList();
+            //calendarioConsultasDTO.MisMedicamentos = misMedicamentos;
             return calendarioConsultasDTO;
         }
 
@@ -76,24 +76,24 @@ namespace historial_blockchain.Controllers
             return await repository.GetTransactions(genNode);
         }
 
-        [HttpPost("GetNode")]
-        public async Task<ActionResult<ConsultaKeyDTO>> GetNode([FromBody] PacientValidation pacientValidation)
+        [HttpPost("GetNode/{Username}/{Password}")]
+        public async Task<ActionResult<ConsultaKeyDTO>> GetNode([FromForm] IFormFile file, string Username, string Password)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
-            if(pacientValidation.File is null || pacientValidation.File.Length < 0)
+            if(file is null || file.Length < 0)
                 return BadRequest();
 
-            var result = await signInManager.PasswordSignInAsync(pacientValidation.Username, pacientValidation.Password, isPersistent: true, lockoutOnFailure: false);
+            var result = await signInManager.PasswordSignInAsync(Username, Password, isPersistent: true, lockoutOnFailure: false);
             if(result.Succeeded)
             {
                 var text = new StringBuilder();
-                using var reader = new StreamReader(pacientValidation.File.OpenReadStream());
+                using var reader = new StreamReader(file.OpenReadStream());
                 while (reader.Peek() >= 0)
                     text.AppendLine(await reader.ReadLineAsync());
                 string textoArchivo = text.ToString();
-                string textoDesencriptado = DecryptFile(textoArchivo, $"prot_{pacientValidation.Username}.{pacientValidation.Password}_ector");
-                var pacient = await userManager.FindByNameAsync(pacientValidation.Username);
+                string textoDesencriptado = DecryptFile(textoArchivo, $"prot_{Username}.{Password}_ector");
+                var pacient = await userManager.FindByNameAsync(Username);
                 var consultaKey = new ConsultaKeyDTO
                 {
                     GenNode = textoDesencriptado,
@@ -126,7 +126,7 @@ namespace historial_blockchain.Controllers
             await repository.InsertTransaction(transactionBlock, createConsultaDTO.GenNodeId);
             return Ok();
         }
-
+        
         private string DecryptFile(string decryptText, string key)  
         {  
             byte[] SrctArray;  
