@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 
 namespace historial_blockchain.Controllers
 {
@@ -41,7 +42,49 @@ namespace historial_blockchain.Controllers
         }
         
         [AllowAnonymous]
-        [HttpGet("{genNode}/{pacientId}")]
+        [HttpGet("{hospitalId}")]
+        public async Task<ActionResult<List<HospitalConsultasDTO>>> GetConsultasHospital(string hospitalId)
+        {
+            var hospitalConsultas = from HC in context.HospitalConsulta
+                                    join U in context.Users on HC.DoctorId equals U.Id
+                                    join UP in context.Users on HC.PacienteId equals UP.Id
+                                    join H in context.Hospitals on HC.HospitalId equals H.HospitalId
+                                    where HC.HospitalId == hospitalId
+                                    select new HospitalConsultasDTO
+                                    {
+                                        DateStamp = HC.DateStamp,
+                                        Paciente = UP.Nombre + " " + UP.Apellido,
+                                        Doctor = U.Nombre + " " + U.Apellido,
+                                    };
+            if(hospitalConsultas is null)
+                return NotFound();
+            var res = await hospitalConsultas.ToListAsync();
+            return res;  
+        }
+
+        [AllowAnonymous]
+        [HttpGet("Doctor/{doctorId}")]
+        public async Task<ActionResult<List<HospitalConsultasDTO>>> GetConsultasDoctor(string doctorId)
+        {
+            var hospitalConsultas = from HC in context.HospitalConsulta
+                                    join U in context.Users on HC.DoctorId equals U.Id
+                                    join UP in context.Users on HC.PacienteId equals UP.Id
+                                    join H in context.Hospitals on HC.HospitalId equals H.HospitalId
+                                    where HC.DoctorId == doctorId
+                                    select new HospitalConsultasDTO
+                                    {
+                                        DateStamp = HC.DateStamp,
+                                        Paciente = UP.Nombre + " " + UP.Apellido,
+                                        Doctor = U.Nombre + " " + U.Apellido,
+                                    };
+            if(hospitalConsultas is null)
+                return NotFound();
+            var res = await hospitalConsultas.ToListAsync();
+            return res;  
+        }
+
+        [AllowAnonymous]
+        [HttpGet("MisConsultas/{genNode}/{pacientId}")]
         public async Task<ActionResult<MiCalendarioConsultasDTO>> GetTransactions(string genNode, string pacientId)
         {
             var calendarioConsultasDTO = new MiCalendarioConsultasDTO();
@@ -64,6 +107,8 @@ namespace historial_blockchain.Controllers
                     misMedicamentos.Add(consultas.ConsultaMedica.PlanMedicamentos);
                 }
             }
+            calendarioConsultasDTO.MisMedicamentos = misMedicamentos;
+            calendarioConsultasDTO.MisConsultas = hospitalConsultas.ToList();
 //
             //calendarioConsultasDTO.MisConsultas = hospitalConsultas.ToList();
             //calendarioConsultasDTO.MisMedicamentos = misMedicamentos;
@@ -76,6 +121,7 @@ namespace historial_blockchain.Controllers
             return await repository.GetTransactions(genNode);
         }
 
+        [AllowAnonymous]
         [HttpPost("GetNode/{Username}/{Password}")]
         public async Task<ActionResult<ConsultaKeyDTO>> GetNode([FromForm] IFormFile file, string Username, string Password)
         {
